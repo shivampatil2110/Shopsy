@@ -44,8 +44,51 @@ const addProduct = async (req, res) => {
   }
 };
 
+const editProduct = async (req, res) => {
+  try {
+    const { name, description, price, stock, category } = req.body;
+    let id = req.query.id;
+    let isExist = await Products.findOne({ _id: { $eq: id } });
+    if (!isExist) {
+      return res.status(404).send({ msg: "Product not found" });
+    }
+
+    let categoryType = await Categories.findOne({ name: category });
+    if (!categoryType) {
+      return res.status(404).send({ msg: "This category does not exists" });
+    }
+
+    let updatedProduct = {
+      name,
+      description,
+      price,
+      stock,
+      categoryId: categoryType.id,
+    };
+    let product = await Products.findByIdAndUpdate(id, updatedProduct, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).send(product);
+  } catch (error) {
+    res.status(500).send({ msg: "Product not found" });
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const id = req.query.id;
+    let deletedProduct = await Products.findByIdAndDelete({ _id: id });
+    res.status(200).send(deletedProduct);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
 module.exports = {
   getAllProducts,
   addProduct,
   getProduct,
+  editProduct,
+  deleteProduct,
 };

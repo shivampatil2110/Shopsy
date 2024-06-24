@@ -24,7 +24,22 @@ const getOrder = async (req, res) => {
     let userId = user.id;
 
     let order = await Orders.findOne({ userId, orderId: req.query.orderId });
-    res.status(200).send(order);
+
+    let orderItems = await OrderItems.find({ orderId: order.id });
+
+    let finalArr = [];
+    for (const item of orderItems) {
+      let productId = item.productId.id.toString("hex");
+      let product = await Products.findOne({ _id: productId });
+      let obj = {
+        quantity: item.quantity,
+        totalPrice: item.price,
+        productName: product.name,
+        productPrice: product.price,
+      };
+      finalArr.push(obj);
+    }
+    res.status(200).send(finalArr);
   } catch (error) {
     console.log(error);
     res.status(404).send(error.message);
@@ -78,7 +93,7 @@ const createOrder = async (req, res) => {
   }
 };
 
-const deleteOrder = () => {};
+const deleteOrder = async (req, res) => {};
 
 module.exports = {
   getAllOrders,

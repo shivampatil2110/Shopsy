@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cookieParser = require("cookie-parser");
 const connDB = require("./db/mongo");
 const authGuard = require("./util/authGuard");
 const setUserName = require("./util/setUserName");
@@ -10,6 +11,7 @@ const cartRoutes = require("./routes/cart");
 const ordersRoutes = require("./routes/orders");
 
 app.use(express.json());
+app.use(cookieParser());
 
 connDB();
 

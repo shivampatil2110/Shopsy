@@ -37,9 +37,13 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const payload = { user: { id: user.id, email: user.email } };
+    const payload = {
+      user: { id: user.id, email: user.email, isAdmin: user.isAdmin },
+    };
     const token = jwt.sign(payload, "Secret", { expiresIn: "1h" });
-
+    res.cookie("userId", user.id, { maxAge: 9000000 });
+    res.cookie("isAdmin", user.isAdmin, { maxAge: 9000000 });
+    res.cookie("userEmail", user.email, { maxAge: 9000000 });
     res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ message: "Server error" });

@@ -7,6 +7,7 @@ const authRoutes = require("./routes/auth");
 const productsRoutes = require("./routes/products");
 const categoriesRoutes = require("./routes/categories");
 const cartRoutes = require("./routes/cart");
+const ordersRoutes = require("./routes/orders");
 
 app.use(express.json());
 
@@ -18,6 +19,7 @@ app.use(authGuard);
 app.use("/products", productsRoutes);
 app.use("/categories", categoriesRoutes);
 app.use("/cart", cartRoutes);
+app.use("/orders", ordersRoutes);
 
 app.listen(3500, () => {
   console.log("listening on 3500");

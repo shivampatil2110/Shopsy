@@ -79,4 +79,16 @@ const deleteItem = async (req, res) => {
   }
 };
 
-module.exports = { addItem, getItems, updateCart, deleteItem };
+const deleteCart = async (req, res) => {
+  try {
+    let user = await User.findOne({ email: req.user });
+
+    await User.findByIdAndDelete({ userId: user.id });
+
+    res.send(200).send({ msg: "cart cleared" });
+  } catch (error) {
+    res.status(500).send({ msg: "cannot delete cart" });
+  }
+};
+
+module.exports = { addItem, getItems, updateCart, deleteItem, deleteCart };

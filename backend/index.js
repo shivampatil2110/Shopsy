@@ -23,6 +23,6 @@ app.use("/categories", categoriesRoutes);
 app.use("/cart", cartRoutes);
 app.use("/orders", ordersRoutes);
 
-app.listen(3500, () => {
+app.listen(35000, () => {
   console.log("listening on 3500");
 });

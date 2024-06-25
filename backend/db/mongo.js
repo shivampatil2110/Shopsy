@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-  const uri = "mongodb://127.0.0.1:27017/E-commerce";
+  const uri =
+    "mongodb+srv://shivampatil2110:5WfJUds8sG14TZav@cluster-e-commerce.bkhmyq3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster-E-commerce";
   try {
     await mongoose.connect(uri);
     console.log("Connected to MongoDB with Mongoose");

@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../schema/user");
 
 const register = async (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, password, email, isAdmin } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -14,7 +14,7 @@ const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    user = new User({ username, password: hashedPassword, email });
+    user = new User({ username, password: hashedPassword, email, isAdmin });
     await user.save();
 
     res.status(201).json({ message: "User registered successfully" });
@@ -40,10 +40,11 @@ const login = async (req, res) => {
     const payload = {
       user: { id: user.id, email: user.email, isAdmin: user.isAdmin },
     };
-    const token = jwt.sign(payload, "Secret", { expiresIn: "1h" });
-    res.cookie("userId", user.id, { maxAge: 9000000 });
-    res.cookie("isAdmin", user.isAdmin, { maxAge: 9000000 });
-    res.cookie("userEmail", user.email, { maxAge: 9000000 });
+    const token = jwt.sign(payload, "Secret", { expiresIn: "6h" });
+    res.cookie("userId", user.id, { maxAge: 21600000 });
+    res.cookie("isAdmin", user.isAdmin, { maxAge: 21600000 });
+    res.cookie("userEmail", user.email, { maxAge: 21600000 });
+    res.cookie("jwtToken", token, { maxAge: 21600000 });
     res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ message: "Server error" });

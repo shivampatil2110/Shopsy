@@ -7,7 +7,7 @@ const {
   deleteOrder,
   createOrder,
 } = require("../controller/ordersController");
-const isAdmin = require("../util/checkUserAdmin")
+const isAdmin = require("../util/checkUserAdmin");
 
 router.get("/getAllOrders", getAllOrders);
 
@@ -15,7 +15,7 @@ router.get("/getOrder", getOrder);
 
 router.post("/createOrder", createOrder);
 
-router.put("/editOrder", editOrder);
+router.put("/editOrder", isAdmin, editOrder);
 
 router.delete("/deleteOrder", deleteOrder);
 

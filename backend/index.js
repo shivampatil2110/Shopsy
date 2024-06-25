@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const connDB = require("./db/mongo");
 const authGuard = require("./util/authGuard");
@@ -12,6 +13,7 @@ const ordersRoutes = require("./routes/orders");
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 connDB();
 

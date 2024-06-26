@@ -18,8 +18,8 @@ app.use(cors());
 connDB();
 
 app.use("/auth", authRoutes);
-app.use(setUserName);
-app.use(authGuard);
+// app.use(setUserName);
+// app.use(authGuard);
 app.use("/products", productsRoutes);
 app.use("/categories", categoriesRoutes);
 app.use("/cart", cartRoutes);

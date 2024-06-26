@@ -1,10 +1,12 @@
 import "./App.css";
 import Auth from "./Auth/Auth";
+import Snackbar from "./util/Snackbar";
 
 function App() {
   return (
     <div className="App">
-      <Auth name="Shivam" age="21" />
+      <Auth />
+      <Snackbar />
     </div>
   );
 }

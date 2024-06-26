@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -25,13 +26,10 @@ const Auth = () => {
         password: e.target.password.value,
       };
       try {
-        let response = await axios.post(
-          "http://localhost:35000/auth/login",
-          login
-        );
-        console.log(response);
+        await axios.post("http://localhost:35000/auth/login", login);
+        toast.success("Successfully Logged In");
       } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.message);
       }
     } else {
       if (e.target.password.value == e.target.confirmPassword.value) {
@@ -41,14 +39,13 @@ const Auth = () => {
           password: e.target.password.value,
         };
         try {
-          let response = await axios.post(
-            "http://localhost:35000/auth/register",
-            signup
-          );
-          console.log(response);
+          await axios.post("http://localhost:35000/auth/register", signup);
+          toast.success("Successfully Signed Up");
         } catch (error) {
-          console.log(error);
+          toast.console.warning(error.response.data.message);
         }
+      } else {
+        toast.error("Password do not match");
       }
     }
   };

@@ -7,13 +7,13 @@ const {
   editProduct,
   deleteProduct,
 } = require("../controller/productsController");
-const isAdmin  = require("../util/checkUserAdmin");
+const isAdmin = require("../util/checkUserAdmin");
 
 router.get("/getAllProducts", getAllProducts);
 
 router.get("/getProduct", getProduct);
 
-router.post("/addProduct", isAdmin, addProduct);
+router.post("/addProduct", addProduct);
 
 router.put("/editProduct", isAdmin, editProduct);
 

@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ProductCard from "./ProductCard";
+import Loader from "../util/Loader";
+import Spinner from "../util/Spinner";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -33,7 +35,7 @@ const Products = () => {
           ))}
         </div>
       ) : (
-        <p className="text-center mt-4">Loading...</p>
+        <Loader />
       )}
     </div>
   );

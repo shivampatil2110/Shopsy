@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
+import { Buffer } from "buffer";
 
 const ProductCard = ({ product }) => {
+  // const [imageBase64, setImageBase64] = useState("");
+  // if (product.productImage) {
+  //   let image = product.productImage.data.data;
+  //   if (image) {
+  //     let buffer = Buffer.from(image, "binary").toString("base64");
+  //     setImageBase64(`data:image/jpeg;base64,${buffer}`);
+  //   }
+  // }
   return (
     <div
       className="bg-white shadow-lg rounded-lg overflow-hidden"
-      key={product.id}
+      key={product._id}
     >
       <img
         className="w-full h-56 object-cover object-center"
-        // src={product.image}
+        // src={imageBase64}
         // alt={product.name}
       />
       <div className="p-4">

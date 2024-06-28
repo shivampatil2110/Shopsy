@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../util/GlobalState";
+import axios from "axios";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [state, setState] = useContext(GlobalContext);
   const navigate = useNavigate();
+
+  // useEffect(async () => {
+  //   try {
+  //     let response = await axios.get("http://localhost:35000/cart/getItems");
+  //     // setState({ ...state, cart: response.length });
+  //   } catch (error) {}
+  // }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -62,7 +72,7 @@ const Navbar = () => {
             <div className="ml-4 flex items-center md:ml-6">
               <button onClick={goToCart}>
                 <FaCartShopping size={25}></FaCartShopping>
-                <span>4</span>
+                <span>{state.cart}</span>
               </button>
             </div>
           </div>

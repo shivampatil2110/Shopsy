@@ -14,7 +14,8 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         let response = await axios.get(
-          "http://localhost:35000/products/getAllProducts"
+          "http://localhost:35000/products/getAllProducts",
+          { withCredentials: true }
         );
         setProducts(response.data);
         console.log(products);

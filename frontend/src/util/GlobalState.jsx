@@ -1,15 +1,15 @@
 import React, { createContext, useState } from "react";
 
-const GlobalContext = createContext();
+export const GlobalContext = createContext();
 
-const GlobalProvider = ({ children }) => {
-  const [cartCount, setCartCount] = useState(); // global variable
+export const GlobalProvider = ({ children }) => {
+  const [state, setState] = useState({
+    cart: 0,
+  }); // global variable
 
   return (
-    <GlobalContext.Provider value={{ cartCount, setCartCount }}>
+    <GlobalContext.Provider value={[state, setState]}>
       {children}
     </GlobalContext.Provider>
   );
 };
-
-export { GlobalProvider, GlobalContext };

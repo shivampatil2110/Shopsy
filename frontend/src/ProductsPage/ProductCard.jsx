@@ -1,15 +1,23 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Buffer } from "buffer";
+import { GlobalContext } from "../util/GlobalState";
 
 const ProductCard = ({ product }) => {
-  // const [imageBase64, setImageBase64] = useState("");
-  // if (product.productImage) {
-  //   let image = product.productImage.data.data;
-  //   if (image) {
-  //     let buffer = Buffer.from(image, "binary").toString("base64");
-  //     setImageBase64(`data:image/jpeg;base64,${buffer}`);
-  //   }
-  // }
+  const [imageBase64, setImageBase64] = useState("");
+  const [state, setState] = useContext(GlobalContext);
+  useEffect(() => {
+    if (product.productImage) {
+      let image = product.productImage.data.data;
+      if (image) {
+        let buffer = Buffer.from(image, "binary").toString("base64");
+        setImageBase64(`data:image/jpeg;base64,${buffer}`);
+      }
+    }
+  }, []);
+  function updateCartValue() {
+    setState({ ...state, cart: state.cart + 1 });
+  }
+
   return (
     <div
       className="bg-white shadow-lg rounded-lg overflow-hidden"
@@ -17,14 +25,17 @@ const ProductCard = ({ product }) => {
     >
       <img
         className="w-full h-56 object-cover object-center"
-        // src={imageBase64}
+        src={imageBase64}
         // alt={product.name}
       />
       <div className="p-4">
         <h2 className="text-gray-900 font-bold text-lg">{product.name}</h2>
         <p className="text-gray-600 mt-2">{product.price}</p>
         <p className="text-gray-700 mt-2">{product.description}</p>
-        <button className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-500">
+        <button
+          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-500"
+          onClick={updateCartValue}
+        >
           Add to Cart
         </button>
       </div>

@@ -13,13 +13,18 @@ const ordersRoutes = require("./routes/orders");
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Replace with your client’s origin
+    credentials: true,
+  })
+);
 
 connDB();
 
 app.use("/auth", authRoutes);
 app.use(setUserName);
-// app.use(authGuard);
+app.use(authGuard);
 app.use("/products", productsRoutes);
 app.use("/categories", categoriesRoutes);
 app.use("/cart", cartRoutes);

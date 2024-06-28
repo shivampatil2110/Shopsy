@@ -4,14 +4,12 @@ import Auth from "./Auth/Auth";
 import Products from "./ProductsPage/Products";
 import Snackbar from "./util/Snackbar";
 import Navbar from "./Navbar/Navbar";
-import { GlobalContext } from "./util/GlobalState";
 
 function App() {
   return (
     <div className="App">
       <Router>
         <div>
-          {/* <GlobalContext> */}
           <Navbar />
           <Routes>
             <Route path="/" element={<Auth />} />
@@ -19,7 +17,6 @@ function App() {
             {/* <Route path="/contact" element={<Contact />} />
             <Route path="/my-component" element={<MyComponent />} /> */}
           </Routes>
-          {/* </GlobalContext> */}
         </div>
       </Router>
       <Snackbar />

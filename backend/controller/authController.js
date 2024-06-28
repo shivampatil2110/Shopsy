@@ -44,23 +44,18 @@ const login = async (req, res) => {
     res.cookie("userId", user.id, {
       maxAge: 21600000,
       httpOnly: true,
-      sameSite: "Lax",
     });
     res.cookie("isAdmin", user.isAdmin, {
       maxAge: 21600000,
       httpOnly: true,
-      sameSite: "Lax",
     });
     res.cookie("userEmail", user.email, {
       maxAge: 21600000,
       httpOnly: true,
-      sameSite: "Lax",
     });
     res.cookie("jwtToken", token, {
       maxAge: 21600000,
       httpOnly: false,
-      sameSite: "Lax",
-      secure: false,
     }); // secure: true if using HTTPS
     res.status(200).json({ token });
   } catch (error) {

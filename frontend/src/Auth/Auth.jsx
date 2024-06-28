@@ -28,11 +28,13 @@ const Auth = () => {
         password: e.target.password.value,
       };
       try {
-        await axios.post("http://localhost:35000/auth/login", login);
+        await axios.post("http://localhost:35000/auth/login", login, {
+          withCredentials: true,
+        });
         toast.success("Successfully Logged In");
         navigate("/products");
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
       }
     } else {
       if (e.target.password.value === e.target.confirmPassword.value) {
@@ -42,7 +44,9 @@ const Auth = () => {
           password: e.target.password.value,
         };
         try {
-          await axios.post("http://localhost:35000/auth/register", signup);
+          await axios.post("http://localhost:35000/auth/register", signup, {
+            withCredentials: true,
+          });
           toast.success("Successfully Signed Up");
           navigate("/products");
         } catch (error) {

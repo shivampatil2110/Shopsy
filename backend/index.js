@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const connDB = require("./db/mongo");
+const { json, urlencoded } = require("body-parser");
 const authGuard = require("./util/authGuard");
 const setUserName = require("./util/setUserName");
 const authRoutes = require("./routes/auth");
@@ -19,6 +20,8 @@ app.use(
     credentials: true,
   })
 );
+// app.use(urlencoded({ limit: "100mb", extended: true }));
+// app.use(json({ limit: "100mb" }));
 
 connDB();
 

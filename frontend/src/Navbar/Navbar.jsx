@@ -4,18 +4,30 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../util/GlobalState";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [state, setState] = useContext(GlobalContext);
   const navigate = useNavigate();
 
-  // useEffect(async () => {
-  //   try {
-  //     let response = await axios.get("http://localhost:35000/cart/getItems");
-  //     // setState({ ...state, cart: response.length });
-  //   } catch (error) {}
-  // }, []);
+  useEffect(() => {
+    const getCartSize = async () => {
+      try {
+        let response = await axios.get("http://localhost:35000/cart/getItems", {
+          withCredentials: true,
+        });
+        let quantity = 0;
+        for (let item of response.data) {
+          quantity += item.quantity;
+        }
+        setState({ ...state, cart: quantity });
+      } catch (error) {
+        toast.error("Cannot get cart items");
+      }
+    };
+    getCartSize();
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -25,7 +37,7 @@ const Navbar = () => {
     navigate("/cart");
   };
 
-  return (
+  return state.isLoggedIn ? (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -69,8 +81,12 @@ const Navbar = () => {
             </div>
           </div>
           <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6">
-              <button onClick={goToCart}>
+            <div className="ml-4 flex items-center md:ml-6 ">
+              <button
+                onClick={goToCart}
+                type="button"
+                className="cursor-pointer"
+              >
                 <FaCartShopping size={25}></FaCartShopping>
                 <span>{state.cart}</span>
               </button>
@@ -147,7 +163,7 @@ const Navbar = () => {
         </div>
       )}
     </nav>
-  );
+  ) : null;
 };
 
 export default Navbar;

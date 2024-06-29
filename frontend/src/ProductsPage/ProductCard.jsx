@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Buffer } from "buffer";
 import { GlobalContext } from "../util/GlobalState";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const ProductCard = ({ product }) => {
   const [imageBase64, setImageBase64] = useState("");
@@ -10,12 +12,25 @@ const ProductCard = ({ product }) => {
       let image = product.productImage.data.data;
       if (image) {
         let buffer = Buffer.from(image, "binary").toString("base64");
-        setImageBase64(`data:image/jpeg;base64,${buffer}`);
+        setImageBase64(`data:image/plain;base64,${buffer}`);
       }
     }
   }, []);
-  function updateCartValue() {
-    setState({ ...state, cart: state.cart + 1 });
+
+  async function updateCartValue() {
+    try {
+      setState({ ...state, cart: state.cart + 1 });
+      let quantity = { quantity: 1 };
+      await axios.post(
+        `http://localhost:35000/cart/addItem?id=${product._id}`,
+        quantity,
+        { withCredentials: true }
+      );
+      toast.success("Product added to cart");
+    } catch (error) {
+      setState({ ...state, cart: state.cart - 1 });
+      toast.error(error.message);
+    }
   }
 
   return (

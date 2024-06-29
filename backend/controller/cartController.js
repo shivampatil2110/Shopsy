@@ -1,5 +1,6 @@
 const Cart = require("../schema/cart");
 const User = require("../schema/user");
+const mongoose = require("mongoose");
 
 const addItem = async (req, res) => {
   try {
@@ -12,9 +13,10 @@ const addItem = async (req, res) => {
     let productExistsInCart = await Cart.findOne({ productId });
 
     if (productExistsInCart) {
+      let updatedQuantity = quantity + productExistsInCart.quantity;
       let cart = {
         productId,
-        quantity,
+        quantity: updatedQuantity,
         userId: user.id,
       };
       let response = await Cart.findByIdAndUpdate(
@@ -41,7 +43,27 @@ const getItems = async (req, res) => {
   try {
     let user = await User.findOne({ email: req.user });
 
-    let cartItems = await Cart.find({ userId: user.id });
+    let cartItems = await Cart.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(user.id) } },
+      {
+        $lookup: {
+          from: "products",
+          localField: "productId",
+          foreignField: "_id",
+          as: "productInfo",
+        },
+      },
+      { $unwind: "$productInfo" },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "productInfo.categoryId",
+          foreignField: "_id",
+          as: "productInfo.categoryInfo",
+        },
+      },
+      { $unwind: "$productInfo.categoryInfo" },
+    ]);
 
     res.status(200).send(cartItems);
   } catch (error) {

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../util/GlobalState";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [state, setState] = useContext(GlobalContext);
   const navigate = useNavigate();
 
   const [login, setLogin] = useState({
@@ -32,6 +34,7 @@ const Auth = () => {
           withCredentials: true,
         });
         toast.success("Successfully Logged In");
+        setState({ ...state, isLoggedIn: true });
         navigate("/products");
       } catch (error) {
         toast.error(error.message);
@@ -48,6 +51,7 @@ const Auth = () => {
             withCredentials: true,
           });
           toast.success("Successfully Signed Up");
+          setState({ ...state, isLoggedIn: true });
           navigate("/products");
         } catch (error) {
           toast.console.warning(error.response.data.message);

@@ -5,10 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../util/GlobalState";
 import axios from "axios";
 import { toast } from "react-toastify";
+import AddProductDialog from "../ProductsPage/AddProduct";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [state, setState] = useContext(GlobalContext);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,9 +41,21 @@ const Navbar = () => {
     navigate("/cart");
   };
 
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return state.isLoggedIn ? (
     <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -71,24 +87,26 @@ const Navbar = () => {
                 >
                   Contact
                 </Link>
-                <Link
-                  to="/cart"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Cart
-                </Link>
               </div>
             </div>
           </div>
+          <button
+            className="text-white rounded-md shadow bg-blue-500 border-2 p-2 ml-80 hover:bg-blue-600"
+            onClick={handleOpenDialog}
+          >
+            Add Products
+          </button>
           <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6 ">
+            <div className="ml-4 flex items-center md:ml-6 relative">
               <button
                 onClick={goToCart}
                 type="button"
                 className="cursor-pointer"
               >
                 <FaCartShopping size={25}></FaCartShopping>
-                <span>{state.cart}</span>
+                <div className=" absolute bottom-4 left-7">
+                  <span>{state.cart}</span>
+                </div>
               </button>
             </div>
           </div>
@@ -120,6 +138,27 @@ const Navbar = () => {
                 )}
               </svg>
             </button>
+          </div>
+          <div>
+            <img
+              src="https://via.placeholder.com/40"
+              alt="Avatar"
+              className="w-10 h-10 rounded-full cursor-pointer"
+              onClick={toggleDropdown}
+            />
+            {isDropdownOpen && (
+              <div className="flex flex-col absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg py-1">
+                <Link
+                  to="/profile"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                >
+                  Profile
+                </Link>
+                <button className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -161,6 +200,9 @@ const Navbar = () => {
             </button>
           </div>
         </div>
+      )}
+      {isDialogOpen && (
+        <AddProductDialog isOpen={isDialogOpen} onClose={handleCloseDialog} />
       )}
     </nav>
   ) : null;

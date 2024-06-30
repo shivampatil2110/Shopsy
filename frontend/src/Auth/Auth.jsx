@@ -22,8 +22,6 @@ const Auth = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e);
-    console.log(e.target.email.value);
     if (isLogin) {
       let login = {
         email: e.target.email.value,

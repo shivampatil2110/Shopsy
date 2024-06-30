@@ -21,15 +21,7 @@ const getProduct = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
-    const {
-      name,
-      description,
-      price,
-      stock,
-      category,
-      imageBase64,
-      contentType,
-    } = req.body;
+    const { name, description, price, stock, category, imageBase64 } = req.body;
 
     let categoryType = await Categories.findOne({ name: category });
 
@@ -37,18 +29,13 @@ const addProduct = async (req, res) => {
       throw new Error("No category");
     }
 
-    let productImage = {
-      data: imageBase64,
-      contentType: contentType,
-    };
-
     let product = new Products({
       name,
       description,
       price,
       stock,
       categoryId: categoryType.id,
-      productImage,
+      productImage: imageBase64,
     });
     await product.save();
 

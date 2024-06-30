@@ -3,16 +3,20 @@ import { Buffer } from "buffer";
 import { GlobalContext } from "../util/GlobalState";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onClick }) => {
   const [imageBase64, setImageBase64] = useState("");
   const [state, setState] = useContext(GlobalContext);
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (product.productImage) {
       let image = product.productImage.data.data;
       if (image) {
         let buffer = Buffer.from(image, "binary").toString("base64");
-        setImageBase64(`data:image/plain;base64,${buffer}`);
+        // setImageBase64(`${buffer}`);
+        // console.log(`data:image/plain;base64,${buffer}`);
       }
     }
   }, []);
@@ -33,15 +37,20 @@ const ProductCard = ({ product }) => {
     }
   }
 
+  function handelRedirect(id) {
+    navigate(`/products/${id}`);
+  }
+
   return (
     <div
-      className="bg-white shadow-lg rounded-lg overflow-hidden"
+      className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer"
       key={product._id}
+      onClick={() => handelRedirect(product._id)}
     >
       <img
         className="w-full h-56 object-cover object-center"
-        src={imageBase64}
-        // alt={product.name}
+        src=""
+        alt={product.name}
       />
       <div className="p-4">
         <h2 className="text-gray-900 font-bold text-lg">{product.name}</h2>

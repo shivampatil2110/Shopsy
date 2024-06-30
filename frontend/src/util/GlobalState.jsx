@@ -5,7 +5,7 @@ export const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
   const [state, setState] = useState({
     cart: 0,
-    isLoggedIn: false,
+    isLoggedIn: true,
   }); // global variable
 
   return (

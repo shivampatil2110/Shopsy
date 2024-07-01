@@ -57,7 +57,7 @@ const login = async (req, res) => {
       maxAge: 21600000,
       httpOnly: false,
     }); // secure: true if using HTTPS
-    res.status(200).json({ token });
+    res.status(200).json({ token, isAdmin: user.isAdmin });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

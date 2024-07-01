@@ -53,7 +53,7 @@ const ProductInfo = () => {
         <div className="flex flex-col md:flex-row md:space-x-8">
           <img
             className="w-full md:w-1/2 h-64 object-cover"
-            src={product.image}
+            src={product.productImage}
             alt={product.name}
           />
           <div className="flex flex-col justify-center md:w-1/2">

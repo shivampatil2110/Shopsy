@@ -45,11 +45,15 @@ const Auth = () => {
           password: e.target.password.value,
         };
         try {
-          await axios.post("http://localhost:35000/auth/register", signup, {
-            withCredentials: true,
-          });
+          let response = await axios.post(
+            "http://localhost:35000/auth/register",
+            signup,
+            {
+              withCredentials: true,
+            }
+          );
           toast.success("Successfully Signed Up");
-          setState({ ...state, isLoggedIn: true });
+          setState({ ...state, isLoggedIn: true, isAdmin: response.isAdmin });
           navigate("/products");
         } catch (error) {
           toast.console.warning(error.response.data.message);

@@ -6,6 +6,7 @@ export const GlobalProvider = ({ children }) => {
   const [state, setState] = useState({
     cart: 0,
     isLoggedIn: true,
+    isAdmin: false,
   }); // global variable
 
   return (

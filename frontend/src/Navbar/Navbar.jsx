@@ -90,12 +90,14 @@ const Navbar = () => {
               </div>
             </div>
           </div>
-          <button
-            className="text-white rounded-md shadow bg-blue-500 border-2 p-2 ml-80 hover:bg-blue-600"
-            onClick={handleOpenDialog}
-          >
-            Add Products
-          </button>
+          {state.isAdmin && (
+            <button
+              className="text-white rounded-md shadow bg-blue-500 border-2 p-2 ml-80 hover:bg-blue-600"
+              onClick={handleOpenDialog}
+            >
+              Add Products
+            </button>
+          )}
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6 relative">
               <button

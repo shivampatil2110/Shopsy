@@ -12,11 +12,10 @@ const ProductCard = ({ product, onClick }) => {
 
   useEffect(() => {
     if (product.productImage) {
-      let image = product.productImage.data.data;
+      let image = product.productImage;
       if (image) {
-        let buffer = Buffer.from(image, "binary").toString("base64");
-        // setImageBase64(`${buffer}`);
-        // console.log(`data:image/plain;base64,${buffer}`);
+        setImageBase64(image);
+        console.log(image);
       }
     }
   }, []);
@@ -49,7 +48,7 @@ const ProductCard = ({ product, onClick }) => {
     >
       <img
         className="w-full h-56 object-cover object-center"
-        src=""
+        src={imageBase64}
         alt={product.name}
       />
       <div className="p-4">

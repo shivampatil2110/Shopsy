@@ -64,6 +64,10 @@ const AddProductDialog = ({ isOpen, onClose }) => {
     try {
       await axios.post("http://localhost:35000/products/addProduct", product, {
         withCredentials: true,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       });
       toast.success("Product added successfully");
       setProduct({

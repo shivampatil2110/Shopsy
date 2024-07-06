@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Navbar from "../Navbar/Navbar";
 
 const Profile = () => {
+  useEffect(async () => {
+    try {
+      let response = await pool.query();
+    } catch (error) {}
+  }, []);
+
   return (
     <>
       <div class="relative min-w-full min-h-screen">
@@ -14,9 +21,27 @@ const Profile = () => {
         <hr width="1" size="500" />
         <div class="absolute inset-y-0 right-0 w-2/3 p-4 flex justify-center">
           <div class="flex flex-col">
-            <div>01</div>
-            <div>02</div>
-            <div>03</div>
+            <div className="w-max h-10 mt-20">
+              <div className="flex flex-row">
+                <p className="font-bold">Name</p>
+                <p className="">Shivam Patil</p>
+              </div>
+            </div>
+            <hr />
+            <div className="w-max h-10">
+              <div className="flex flex-row">
+                <p className="font-bold">Name</p>
+                <p className="">Shivam Patil</p>
+              </div>
+            </div>
+            <hr />
+            <div className="w-max h-10">
+              <div className="flex flex-row">
+                <p className="font-bold">Name</p>
+                <p className="">Shivam Patil</p>
+              </div>
+            </div>
+            <hr />
           </div>
         </div>
       </div>

@@ -28,11 +28,19 @@ const Auth = () => {
         password: e.target.password.value,
       };
       try {
-        await axios.post("http://localhost:35000/auth/login", login, {
-          withCredentials: true,
-        });
+        let response = await axios.post(
+          "http://localhost:35000/auth/login",
+          login,
+          {
+            withCredentials: true,
+          }
+        );
         toast.success("Successfully Logged In");
-        setState({ ...state, isLoggedIn: true });
+        setState({
+          ...state,
+          isLoggedIn: true,
+          isAdmin: response.data.isAdmin,
+        });
         navigate("/products");
       } catch (error) {
         toast.error(error.message);

@@ -11,6 +11,7 @@ const productsRoutes = require("./routes/products");
 const categoriesRoutes = require("./routes/categories");
 const cartRoutes = require("./routes/cart");
 const ordersRoutes = require("./routes/orders");
+const userRoutes = require("./routes/user");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -32,6 +33,7 @@ app.use("/products", productsRoutes);
 app.use("/categories", categoriesRoutes);
 app.use("/cart", cartRoutes);
 app.use("/orders", ordersRoutes);
+app.use("/user", userRoutes);
 
 app.listen(35000, () => {
   console.log("listening on 3500");

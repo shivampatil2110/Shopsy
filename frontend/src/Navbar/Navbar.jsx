@@ -6,6 +6,7 @@ import { GlobalContext } from "../util/GlobalState";
 import axios from "axios";
 import { toast } from "react-toastify";
 import AddProductDialog from "../ProductsPage/AddProduct";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +31,13 @@ const Navbar = () => {
         toast.error("Cannot get cart items");
       }
     };
+    const checkUserAdmin = () => {
+      if (Cookies.get("isAdmin")) {
+        state.isAdmin = Cookies.get("isAdmin");
+      }
+    };
     getCartSize();
+    checkUserAdmin();
   }, []);
 
   const toggleMenu = () => {
@@ -51,6 +58,14 @@ const Navbar = () => {
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const logout = () => {
+    Cookies.remove("isAdmin");
+    Cookies.remove("jwtToken");
+    Cookies.remove("userEmail");
+    Cookies.remove("userId");
+    navigate("/");
   };
 
   return state.isLoggedIn ? (
@@ -156,7 +171,10 @@ const Navbar = () => {
                 >
                   Profile
                 </Link>
-                <button className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                <button
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                  onClick={logout}
+                >
                   Logout
                 </button>
               </div>

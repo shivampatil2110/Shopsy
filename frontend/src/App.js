@@ -1,43 +1,31 @@
 import "./App.css";
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { GlobalContext } from "./util/GlobalState";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import Auth from "./Auth/Auth";
 import Products from "./ProductsPage/Products";
 import Snackbar from "./util/Snackbar";
-import Navbar from "./Navbar/Navbar";
 import Cart from "./Cart/Cart";
 import ProductInfo from "./ProductsPage/ProductInfo";
 import Profile from "./Profile/Profile";
+import AuthGuard from "./Auth/AuthGuard";
 
 function App() {
-  const [state, setState] = useContext(GlobalContext);
-  // const navigate = useNavigate();
-
-  useEffect(() => {
-    const setLoggedIn = () => {
-      const userExists = Cookies.get("jwtToken");
-      if (userExists == undefined) {
-        setState({ ...state, isLoggedIn: false });
-        // navigate("/");
-      }
-    };
-    setLoggedIn();
-  }, []);
+  const ProtectedProducts = AuthGuard(Products);
+  const ProtectedProductsInfo = AuthGuard(ProductInfo);
+  const ProtectedCart = AuthGuard(Cart);
+  const ProtectedProfile = AuthGuard(Profile);
 
   return (
     <div className="App">
       <Router>
         <div>
-          <Navbar />
           <Routes>
             <Route path="/" element={<Auth />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/products/:id" element={<ProductInfo />} />
+            <Route path="/products" element={<ProtectedProducts />} />
+            <Route path="/cart" element={<ProtectedCart />} />
+            <Route path="/profile" element={<ProtectedProfile />} />
+            <Route path="/products/:id" element={<ProtectedProductsInfo />} />
+            <Route path="/*" element={<Auth />} />
           </Routes>
         </div>
       </Router>

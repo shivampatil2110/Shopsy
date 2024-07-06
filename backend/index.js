@@ -21,8 +21,8 @@ app.use(
     credentials: true,
   })
 );
-// app.use(urlencoded({ limit: "100mb", extended: true }));
-// app.use(json({ limit: "100mb" }));
+app.use(urlencoded({ limit: "100mb", extended: true }));
+app.use(json({ limit: "100mb" }));
 
 connDB();
 

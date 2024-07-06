@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../util/GlobalState";
+import Cookies from "js-cookie";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -19,6 +20,14 @@ const Auth = () => {
     password: "",
     confirmPassword: "",
   });
+
+  useEffect(() => {
+    if (Cookies.get("jwtToken")) {
+      navigate("/products");
+    } else {
+      navigate("/");
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,6 +78,22 @@ const Auth = () => {
       } else {
         toast.error("Password do not match");
       }
+    }
+    getCartSize();
+  };
+
+  const getCartSize = async () => {
+    try {
+      let response = await axios.get("http://localhost:35000/cart/getItems", {
+        withCredentials: true,
+      });
+      let quantity = 0;
+      for (let item of response.data) {
+        quantity += item.quantity;
+      }
+      setState({ ...state, cart: quantity });
+    } catch (error) {
+      toast.error("Cannot get cart items");
     }
   };
 

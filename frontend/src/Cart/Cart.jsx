@@ -3,6 +3,7 @@ import axios from "axios";
 import { GlobalContext } from "../util/GlobalState";
 import { toast } from "react-toastify";
 import Spinner from "../util/Spinner";
+import Navbar from "../Navbar/Navbar";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -66,6 +67,7 @@ const Cart = () => {
 
   return (
     <>
+      <Navbar></Navbar>
       <div className="container mx-auto p-4 ">
         <h1 className="text-2xl font-bold mb-4">Shopping Cart</h1>
         {loading ? (

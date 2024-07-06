@@ -43,15 +43,15 @@ const login = async (req, res) => {
     const token = jwt.sign(payload, "Secret", { expiresIn: "6h" });
     res.cookie("userId", user.id, {
       maxAge: 21600000,
-      httpOnly: true,
+      httpOnly: false,
     });
     res.cookie("isAdmin", user.isAdmin, {
       maxAge: 21600000,
-      httpOnly: true,
+      httpOnly: false,
     });
     res.cookie("userEmail", user.email, {
       maxAge: 21600000,
-      httpOnly: true,
+      httpOnly: false,
     });
     res.cookie("jwtToken", token, {
       maxAge: 21600000,

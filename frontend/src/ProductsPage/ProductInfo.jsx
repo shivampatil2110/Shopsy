@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { GlobalContext } from "../util/GlobalState";
 import Spinner from "../util/Spinner";
+import Navbar from "../Navbar/Navbar";
+import Cookies from "js-cookie";
 
 const ProductInfo = () => {
   const { id } = useParams();
@@ -13,6 +15,7 @@ const ProductInfo = () => {
   const [state, setState] = useContext(GlobalContext);
 
   useEffect(() => {
+    let cookies = Cookies.get("userId");
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(
@@ -46,30 +49,37 @@ const ProductInfo = () => {
   };
 
   return (
-    <div className="container mt-20 p-4">
-      {loading ? (
-        <Spinner />
-      ) : (
-        <div className="flex flex-col md:flex-row md:space-x-8">
-          <img
-            className="w-full md:w-1/2 h-64 object-cover"
-            src={product.productImage}
-            alt={product.name}
-          />
-          <div className="flex flex-col justify-center md:w-1/2">
-            <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-            <p className="text-2xl text-gray-800 mb-4">Rs {product.price}</p>
-            <p className="text-gray-700 mb-6">{product.description}</p>
-            <button
-              onClick={addToCart}
-              className="bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-500"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+    <>
+      <Navbar />
+      <div className="container mt-20 p-4">
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <div className="flex flex-col md:flex-row md:space-x-8">
+              <img
+                className="w-full md:w-1/2 h-64 object-cover"
+                src={product.productImage}
+                alt={product.name}
+              />
+              <div className="flex flex-col justify-center md:w-1/2">
+                <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+                <p className="text-2xl text-gray-800 mb-4">
+                  Rs {product.price}
+                </p>
+                <p className="text-gray-700 mb-6">{product.description}</p>
+                <button
+                  onClick={addToCart}
+                  className="bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-500"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

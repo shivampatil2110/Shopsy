@@ -1,15 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
+import axios from "axios";
 
 const Profile = () => {
-  useEffect(async () => {
-    try {
-      let response = await pool.query();
-    } catch (error) {}
+  const [user, setUser] = useState({
+    email: "",
+    username: "",
+    since: "",
+    admin: false,
+  });
+
+  useEffect(() => {
+    async function getUser() {
+      try {
+        let response = await axios.get(
+          "http://localhost:35000/user/userProfile",
+          { withCredentials: true }
+        );
+        setUser({
+          email: response.data.email,
+          username: response.data.username,
+          since: response.data.createdAt,
+          admin: response.data.isAdmin,
+        });
+        console.log(user);
+      } catch (error) {}
+    }
+    getUser();
   }, []);
 
   return (
     <>
+      {/* <pre>{{ user }}</pre> */}
+      <Navbar />
       <div class="relative min-w-full min-h-screen">
         <div class="absolute inset-y-0 left-0 w-1/3 p-4 flex justify-center ">
           <img
@@ -19,29 +42,51 @@ const Profile = () => {
           />
         </div>
         <hr width="1" size="500" />
-        <div class="absolute inset-y-0 right-0 w-2/3 p-4 flex justify-center">
-          <div class="flex flex-col">
-            <div className="w-max h-10 mt-20">
-              <div className="flex flex-row">
-                <p className="font-bold">Name</p>
-                <p className="">Shivam Patil</p>
+        <div className="absolute inset-y-0 right-0 w-2/3 p-4 flex justify-center">
+          <div className="flex flex-col min-w-full">
+            <div className="flex flex-col space-y-8 min-w-full">
+              <div className="mt-20">
+                <div className="flex flex-row">
+                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-bold">
+                    Username:{" "}
+                  </p>
+                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-medium">
+                    {user.username}
+                  </p>
+                </div>
               </div>
-            </div>
-            <hr />
-            <div className="w-max h-10">
-              <div className="flex flex-row">
-                <p className="font-bold">Name</p>
-                <p className="">Shivam Patil</p>
+              <hr />
+              <div className="">
+                <div className="flex flex-row">
+                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-bold">
+                    E-mail:{" "}
+                  </p>
+                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-medium">
+                    {user.email}
+                  </p>
+                </div>
               </div>
-            </div>
-            <hr />
-            <div className="w-max h-10">
-              <div className="flex flex-row">
-                <p className="font-bold">Name</p>
-                <p className="">Shivam Patil</p>
+              <hr />
+              <div className="">
+                <div className="flex flex-row">
+                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-bold">
+                    Member Since:{" "}
+                  </p>
+                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-medium">
+                    {user.since}
+                  </p>
+                </div>
               </div>
+              <hr />
             </div>
-            <hr />
+            <div className="flex flex-rox space-x-2 min-w-full mt-10 ">
+              <button className="text-white rounded-md shadow bg-blue-500 border-2 p-2 ml-80 hover:bg-blue-600 w-1/2 ">
+                Your Addresses
+              </button>
+              <button className="text-white rounded-md shadow bg-blue-500 border-2 p-2 ml-80 hover:bg-blue-600 w-1/2">
+                Your Addresses
+              </button>
+            </div>
           </div>
         </div>
       </div>

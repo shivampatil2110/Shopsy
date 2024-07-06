@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ProductCard from "./ProductCard";
 import Loader from "../util/Loader";
+import Navbar from "../Navbar/Navbar";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -26,17 +27,20 @@ const Products = () => {
   }, []);
 
   return (
-    <div className="container mx-auto">
-      {!loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {products.map((product) => (
-            <ProductCard product={product} key={product._id} />
-          ))}
-        </div>
-      ) : (
-        <Loader />
-      )}
-    </div>
+    <>
+      <Navbar />
+      <div className="container mx-auto">
+        {!loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {products.map((product) => (
+              <ProductCard product={product} key={product._id} />
+            ))}
+          </div>
+        ) : (
+          <Loader />
+        )}
+      </div>
+    </>
   );
 };
 

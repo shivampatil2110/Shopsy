@@ -6,7 +6,7 @@ const userProfile = async (req, res) => {
     if (!response) {
       return;
     }
-    res.send(reponse);
+    res.send(response);
   } catch (error) {}
 };
 

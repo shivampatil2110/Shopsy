@@ -10,6 +10,7 @@
     "axios": "^1.7.2",
     "base64-image-upload": "^1.1.4",
     "buffer": "^6.0.3",
+    "country-state-city": "^3.2.1",
     "js-cookie": "^3.0.5",
     "postcss": "^8.4.38",
     "react": "^18.3.1",

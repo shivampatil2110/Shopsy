@@ -8,12 +8,16 @@ import Cart from "./Cart/Cart";
 import ProductInfo from "./ProductsPage/ProductInfo";
 import Profile from "./Profile/Profile";
 import AuthGuard from "./Auth/AuthGuard";
+import Address from "./Profile/Address";
+import AddAddress from "./Profile/AddAddress";
 
 function App() {
   const ProtectedProducts = AuthGuard(Products);
   const ProtectedProductsInfo = AuthGuard(ProductInfo);
   const ProtectedCart = AuthGuard(Cart);
   const ProtectedProfile = AuthGuard(Profile);
+  const ProtectedAddress = AuthGuard(Address);
+  const ProtectedAddAdderess = AuthGuard(AddAddress);
 
   return (
     <div className="App">
@@ -24,6 +28,11 @@ function App() {
             <Route path="/products" element={<ProtectedProducts />} />
             <Route path="/cart" element={<ProtectedCart />} />
             <Route path="/profile" element={<ProtectedProfile />} />
+            <Route path="/profile/address" element={<ProtectedAddress />} />
+            <Route
+              path="/profile/address/addAddress"
+              element={<ProtectedAddAdderess />}
+            />
             <Route path="/products/:id" element={<ProtectedProductsInfo />} />
             <Route path="/*" element={<Auth />} />
           </Routes>

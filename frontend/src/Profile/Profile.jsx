@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -9,6 +10,7 @@ const Profile = () => {
     since: "",
     admin: false,
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getUser() {
@@ -28,6 +30,10 @@ const Profile = () => {
     }
     getUser();
   }, []);
+
+  function goToAddress() {
+    navigate("/profile/address");
+  }
 
   return (
     <>
@@ -79,12 +85,15 @@ const Profile = () => {
               </div>
               <hr />
             </div>
-            <div className="flex flex-rox space-x-2 min-w-full mt-10 ">
-              <button className="text-white rounded-md shadow bg-blue-500 border-2 p-2 ml-80 hover:bg-blue-600 w-1/2 ">
+            <div className="flex flex-rox min-w-full mt-10 ">
+              <button
+                className="text-white rounded-md shadow bg-blue-500 py-2 border-2 hover:bg-blue-600 w-1/2 "
+                onClick={goToAddress}
+              >
                 Your Addresses
               </button>
-              <button className="text-white rounded-md shadow bg-blue-500 border-2 p-2 ml-80 hover:bg-blue-600 w-1/2">
-                Your Addresses
+              <button className="text-white rounded-md shadow bg-blue-500 py-2 border-2 hover:bg-blue-600 w-1/2">
+                Your Orders
               </button>
             </div>
           </div>

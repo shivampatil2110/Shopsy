@@ -10,4 +10,25 @@ const userProfile = async (req, res) => {
   } catch (error) {}
 };
 
-module.exports = { userProfile };
+const addAddress = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.user });
+    let addressArray = user.address;
+    addressArray.push(req.body);
+    await User.findByIdAndUpdate(user._id, { address: addressArray });
+    res.status(200).send({ msg: "Addresses added successfully" });
+  } catch (error) {
+    res.status(500).send({ msg: "Error adding address" });
+  }
+};
+
+const getAddress = async (req, res) => {
+  try {
+    let user = await User.findOne({ email: req.user });
+    res.status(200).send({ address: user.address });
+  } catch (error) {
+    res.status(500).send({ msg: "Error getting address" });
+  }
+};
+
+module.exports = { userProfile, addAddress, getAddress };

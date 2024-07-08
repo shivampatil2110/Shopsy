@@ -31,4 +31,17 @@ const getAddress = async (req, res) => {
   }
 };
 
-module.exports = { userProfile, addAddress, getAddress };
+const deleteAddress = async (req, res) => {
+  try {
+    let user = await User.findOneAndUpdate(
+      { email: req.user },
+      { $pull: { address: { _id: req.body.addressId } } },
+      { new: true }
+    );
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send({ msg: "Error updating address" });
+  }
+};
+
+module.exports = { userProfile, addAddress, getAddress, deleteAddress };

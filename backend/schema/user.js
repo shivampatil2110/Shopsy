@@ -77,6 +77,9 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   address: [addressSchema],
+  userImage: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

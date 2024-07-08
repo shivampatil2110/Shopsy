@@ -30,6 +30,24 @@ const Address = () => {
     getUserAddress();
   }, []);
 
+  async function deleteAddress(addressId) {
+    try {
+      let response = await axios.post(
+        "http://localhost:35000/user/deleteAddress",
+        { addressId },
+        {
+          withCredentials: true,
+        }
+      );
+      setAddress(response.data.address);
+      toast.success("Address deleted successfully");
+    } catch (error) {
+      toast.error("Error deleting address");
+    }
+  }
+
+  function editAddress() {}
+
   return (
     <>
       <Navbar />
@@ -56,11 +74,21 @@ const Address = () => {
               <p>{address.country}</p>
               <p>Phone Number: {address.mobile}</p>
               <div className="items-end">
-                <button type="button" className="cursor-pointer">
+                <button
+                  type="button"
+                  className="cursor-pointer text-blue-800"
+                  onClick={editAddress}
+                >
                   Edit
                 </button>
                 <span>|</span>
-                <button type="button" className="cursor-pointer">
+                <button
+                  type="button"
+                  className="cursor-pointer text-blue-800"
+                  onClick={() => {
+                    deleteAddress(address._id);
+                  }}
+                >
                   Delete
                 </button>
               </div>

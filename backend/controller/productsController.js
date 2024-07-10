@@ -35,7 +35,7 @@ const addProduct = async (req, res) => {
       price,
       stock,
       categoryId: categoryType.id,
-      productImage: imageBase64,
+      // productImage: imageBase64,
     });
     await product.save();
 

@@ -17,6 +17,10 @@ const ordersSchema = new mongoose.Schema({
     enum: ["pending", "confirmed", "shipped", "delivered"],
     default: "pending",
   },
+  // shipTo: {
+  //   type: String,
+  //   required: true,
+  // },
   createdAt: {
     type: Date,
     default: Date.now,

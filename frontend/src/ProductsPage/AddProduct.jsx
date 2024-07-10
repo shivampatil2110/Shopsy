@@ -12,7 +12,7 @@ const AddProductDialog = ({ isOpen, onClose }) => {
     imageBase64: "",
   });
   const [categories, setCategories] = useState([]);
-  const [isFormValid, setIsFormValid] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(true);
 
   useEffect(() => {
     async function getCategories() {
@@ -29,18 +29,18 @@ const AddProductDialog = ({ isOpen, onClose }) => {
     getCategories();
   }, []);
 
-  useEffect(() => {
-    const checkFormValidity = () => {
-      const { name, price, stock, category, description, imageBase64 } =
-        product;
-      if (name && price && stock && category && description && imageBase64) {
-        setIsFormValid(true);
-      } else {
-        setIsFormValid(false);
-      }
-    };
-    checkFormValidity();
-  }, [product]);
+  // useEffect(() => {
+  //   const checkFormValidity = () => {
+  //     const { name, price, stock, category, description, imageBase64 } =
+  //       product;
+  //     if (name && price && stock && category && description && imageBase64) {
+  //       setIsFormValid(true);
+  //     } else {
+  //       setIsFormValid(false);
+  //     }
+  //   };
+  //   checkFormValidity();
+  // }, [product]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

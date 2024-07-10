@@ -44,6 +44,25 @@ const Cart = () => {
     setTotalPrice(total);
   };
 
+  const createOrder = async () => {
+    try {
+      await axios.post(
+        "http://localhost:35000/orders/createOrder",
+        { cart },
+        {
+          withCredentials: true,
+        }
+      );
+      setCart([]);
+      toast.success("Order created successfully");
+      await axios.delete("http://localhost:35000/cart/deleteCart", {
+        withCredentials: true,
+      });
+    } catch (error) {
+      toast.error("Error creating order");
+    }
+  };
+
   const removeFromCart = async (productId) => {
     try {
       await axios.delete(
@@ -121,7 +140,10 @@ const Cart = () => {
               <p className="text-lg font-semibold">
                 Total: Rs {totalPrice.toFixed(2)}
               </p>
-              <button className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md">
+              <button
+                className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
+                onClick={createOrder}
+              >
                 Checkout
               </button>
             </div>

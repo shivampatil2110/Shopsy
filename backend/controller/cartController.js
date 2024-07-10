@@ -103,11 +103,11 @@ const deleteItem = async (req, res) => {
 
 const deleteCart = async (req, res) => {
   try {
-    let user = await User.findOne({ email: req.user });
+    let user = req.cookies.userId;
 
-    await User.findByIdAndDelete({ userId: user.id });
+    await Cart.deleteMany({ userId: user });
 
-    res.send(200).send({ msg: "cart cleared" });
+    res.status(200).send({ msg: "cart cleared" });
   } catch (error) {
     res.status(500).send({ msg: "cannot delete cart" });
   }

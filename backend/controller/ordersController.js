@@ -50,15 +50,14 @@ const editOrder = () => {};
 
 const createOrder = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.user });
-    let userId = user.id;
+    let userId = req.cookies.userId;
 
-    let cart = await Cart.find({ userId });
+    let cart = req.body.cart;
 
     let totalAmount = 0;
     let itemsArray = [];
     for (let item of cart) {
-      let productId = item.productId.id.toString("hex");
+      let productId = item.productId.toString("hex");
       let product = await Products.findOne({ _id: productId });
       let totalCost = product.price * item.quantity;
       totalAmount += totalCost;

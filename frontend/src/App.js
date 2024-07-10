@@ -10,6 +10,7 @@ import Profile from "./Profile/Profile";
 import AuthGuard from "./Auth/AuthGuard";
 import Address from "./Profile/Address";
 import AddAddress from "./Profile/AddAddress";
+import Orders from "./Orders/Orders";
 
 function App() {
   const ProtectedProducts = AuthGuard(Products);
@@ -18,6 +19,7 @@ function App() {
   const ProtectedProfile = AuthGuard(Profile);
   const ProtectedAddress = AuthGuard(Address);
   const ProtectedAddAdderess = AuthGuard(AddAddress);
+  const ProtectedOrders = AuthGuard(Orders);
 
   return (
     <div className="App">
@@ -34,6 +36,7 @@ function App() {
               element={<ProtectedAddAdderess />}
             />
             <Route path="/products/:id" element={<ProtectedProductsInfo />} />
+            <Route path="/orders" element={<ProtectedOrders />} />
             <Route path="/*" element={<Auth />} />
           </Routes>
         </div>

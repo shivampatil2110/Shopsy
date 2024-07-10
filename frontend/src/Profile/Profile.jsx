@@ -35,6 +35,10 @@ const Profile = () => {
     navigate("/profile/address");
   }
 
+  function goToOrders() {
+    navigate("/orders");
+  }
+
   return (
     <>
       {/* <pre>{{ user }}</pre> */}
@@ -92,7 +96,10 @@ const Profile = () => {
               >
                 Your Addresses
               </button>
-              <button className="text-white rounded-md shadow bg-blue-500 py-2 border-2 hover:bg-blue-600 w-1/2">
+              <button
+                className="text-white rounded-md shadow bg-blue-500 py-2 border-2 hover:bg-blue-600 w-1/2"
+                onClick={goToOrders}
+              >
                 Your Orders
               </button>
             </div>

@@ -42,11 +42,12 @@ const getAllOrders = async (req, res) => {
           updatedAt: { $first: "$updatedAt" },
           products: {
             $push: {
-              productId: "$orderItems.productInfo.product._id",
+              productId: "$orderItems.productInfo._id",
               name: "$orderItems.productInfo.name",
               description: "$orderItems.productInfo.description",
               price: "$orderItems.productInfo.price",
               quantity: "$orderItems.quantity",
+              image: "$orderItems.productInfo.productImage",
               totalPrice: {
                 $multiply: [
                   "$orderItems.quantity",

@@ -4,10 +4,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Spinner from "../util/Spinner";
 import moment from "moment/moment";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
   const [orders, setOrders] = useState();
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getOrders() {
@@ -52,6 +54,10 @@ const Orders = () => {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function redirectToProductPage(productId) {
+    navigate(`/products/${productId}`);
   }
 
   return (
@@ -109,7 +115,12 @@ const Orders = () => {
                 </p>
 
                 {order.products.map((product) => (
-                  <div className="items-center mb-4">
+                  <div
+                    className="items-center mb-4 cursor-pointer"
+                    onClick={() => {
+                      redirectToProductPage(product.productId);
+                    }}
+                  >
                     <img
                       src="path-to-your-image.png"
                       alt="Product"
@@ -123,6 +134,7 @@ const Orders = () => {
                       {" "}
                       <strong>Total Price:</strong> Rs.{product.totalPrice}
                     </p>
+                    <hr />
                   </div>
                 ))}
 

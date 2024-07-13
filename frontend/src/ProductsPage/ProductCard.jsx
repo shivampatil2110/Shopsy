@@ -40,6 +40,13 @@ const ProductCard = ({ product, onClick }) => {
     navigate(`/products/${id}`);
   }
 
+  function truncateText(text) {
+    if (text.length > 60) {
+      return text.slice(0, 57) + "...";
+    }
+    return text;
+  }
+
   return (
     <div
       className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer"
@@ -51,10 +58,12 @@ const ProductCard = ({ product, onClick }) => {
         src={imageBase64}
         alt={product.name}
       />
-      <div className="p-4">
+      <div className="p-4 grid">
         <h2 className="text-gray-900 font-bold text-lg">{product.name}</h2>
         <p className="text-gray-600 mt-2">{product.price}</p>
-        <p className="text-gray-700 mt-2">{product.description}</p>
+        <p className="text-gray-700 mt-2 ">
+          {truncateText(product.description)}
+        </p>
         <button
           className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-500"
           onClick={updateCartValue}

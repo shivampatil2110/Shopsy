@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import moment from "moment/moment";
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -57,10 +58,10 @@ const Profile = () => {
             <div className="flex flex-col space-y-8 min-w-full">
               <div className="mt-20">
                 <div className="flex flex-row">
-                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-bold">
+                  <p className="text-gray-900 hover:text-gray-900 rounded-md font-bold">
                     Username:{" "}
                   </p>
-                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-medium">
+                  <p className="text-gray-700 hover:text-gray-700 rounded-md font-medium">
                     {user.username}
                   </p>
                 </div>
@@ -68,10 +69,10 @@ const Profile = () => {
               <hr />
               <div className="">
                 <div className="flex flex-row">
-                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-bold">
-                    E-mail:{" "}
+                  <p className="text-gray-900 hover:text-gray-900 rounded-md font-bold">
+                    E-mail:
                   </p>
-                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-medium">
+                  <p className="text-gray-700 hover:text-gray-700 rounded-md font-medium">
                     {user.email}
                   </p>
                 </div>
@@ -79,11 +80,11 @@ const Profile = () => {
               <hr />
               <div className="">
                 <div className="flex flex-row">
-                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-bold">
+                  <p className="text-gray-900 hover:text-gray-900 rounded-md font-bold">
                     Member Since:{" "}
                   </p>
-                  <p className="text-gray-700 hover:text-gray-900 rounded-md  font-medium">
-                    {user.since}
+                  <p className="text-gray-700 hover:text-gray-700 rounded-md font-medium">
+                    {moment(user.since).format("DD MMMM YYYY")}
                   </p>
                 </div>
               </div>

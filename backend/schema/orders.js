@@ -14,13 +14,12 @@ const ordersSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ["pending", "confirmed", "shipped", "delivered"],
-    default: "pending",
+    enum: ["confirmed", "shipped", "delivered"],
+    default: "confirmed",
   },
-  // shipTo: {
-  //   type: String,
-  //   required: true,
-  // },
+  shipTo: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -3,13 +3,61 @@ const Orders = require("../schema/orders");
 const OrderItems = require("../schema/orderItems");
 const Cart = require("../schema/cart");
 const Products = require("../schema/products");
+const { default: mongoose } = require("mongoose");
+const { createInvoice } = require("./Invoice/Invoice");
+const moment = require("moment");
 
 const getAllOrders = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.user });
-    let userId = user.id;
+    let userId = req.cookies.userId;
 
-    let orders = await Orders.find({ userId });
+    let orders = await Orders.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      {
+        $lookup: {
+          from: "ordersitems",
+          localField: "_id",
+          foreignField: "orderId",
+          as: "orderItems",
+        },
+      },
+      { $unwind: "$orderItems" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "orderItems.productId",
+          foreignField: "_id",
+          as: "orderItems.productInfo",
+        },
+      },
+      { $unwind: "$orderItems.productInfo" },
+      {
+        $group: {
+          _id: "$_id",
+          userId: { $first: "$userId" },
+          totalAmount: { $first: "$totalAmount" },
+          status: { $first: "$status" },
+          shipTo: { $first: "$shipTo" },
+          createdAt: { $first: "$createdAt" },
+          updatedAt: { $first: "$updatedAt" },
+          products: {
+            $push: {
+              productId: "$orderItems.productInfo.product._id",
+              name: "$orderItems.productInfo.name",
+              description: "$orderItems.productInfo.description",
+              price: "$orderItems.productInfo.price",
+              quantity: "$orderItems.quantity",
+              totalPrice: {
+                $multiply: [
+                  "$orderItems.quantity",
+                  "$orderItems.productInfo.price",
+                ],
+              },
+            },
+          },
+        },
+      },
+    ]);
 
     res.status(200).send(orders);
   } catch (error) {
@@ -94,10 +142,40 @@ const createOrder = async (req, res) => {
 
 const deleteOrder = async (req, res) => {};
 
+const generateInvoice = async (req, res) => {
+  const order = req.body;
+  const products = [];
+  for (let product of order.products) {
+    let obj = {};
+    obj.item = product.name;
+    obj.description = product.description;
+    obj.quantity = product.quantity;
+    obj.amount = product.totalPrice;
+    products.push(obj);
+  }
+  const invoice = {
+    shipping: {
+      name: "John Doe",
+      address: "1234 Main Street",
+      city: "San Francisco",
+      state: "CA",
+      country: "USA",
+      postal_code: 94111,
+    },
+    items: products,
+    subtotal: order.totalAmount,
+    paid: 0,
+    invoice_nr: order._id,
+    date: moment().format("YYYY-MM-DD HH:mm:ss"),
+  };
+  createInvoice(invoice, "invoice.pdf", res);
+};
+
 module.exports = {
   getAllOrders,
   getOrder,
   editOrder,
   createOrder,
   deleteOrder,
+  generateInvoice,
 };

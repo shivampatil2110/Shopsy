@@ -92,13 +92,13 @@ const Profile = () => {
             </div>
             <div className="flex flex-rox min-w-full mt-10 ">
               <button
-                className="text-white rounded-md shadow bg-blue-500 py-2 border-2 hover:bg-blue-600 w-1/2 "
+                className="text-white rounded-md shadow bg-yellow-500 py-2 border-2 hover:bg-yellow-600 w-1/2 "
                 onClick={goToAddress}
               >
                 Your Addresses
               </button>
               <button
-                className="text-white rounded-md shadow bg-blue-500 py-2 border-2 hover:bg-blue-600 w-1/2"
+                className="text-white rounded-md shadow bg-yellow-500 py-2 border-2 hover:bg-yellow-600 w-1/2"
                 onClick={goToOrders}
               >
                 Your Orders

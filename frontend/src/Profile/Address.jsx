@@ -3,10 +3,13 @@ import Navbar from "../Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { setAddress } from "../slices/addressSlice"; // Adjust the path
 
 const Address = () => {
   let [address, setAddress] = useState([]);
-
+  const addressData = useSelector((state) => state.address);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   function addAddress() {
@@ -46,7 +49,11 @@ const Address = () => {
     }
   }
 
-  function editAddress() {}
+  function editAddress(address) {
+    dispatch(setAddress(address));
+    navigate("/profile/address/addAddress");
+    console.log(address);
+  }
 
   return (
     <>
@@ -77,7 +84,9 @@ const Address = () => {
                 <button
                   type="button"
                   className="cursor-pointer text-blue-800"
-                  onClick={editAddress}
+                  onClick={() => {
+                    editAddress(address);
+                  }}
                 >
                   Edit
                 </button>

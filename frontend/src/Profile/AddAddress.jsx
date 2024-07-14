@@ -4,6 +4,7 @@ import { Country, State, City } from "country-state-city";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 const AddAddress = () => {
   const [address, setAddress] = useState({
@@ -22,6 +23,7 @@ const AddAddress = () => {
     country: [],
     state: [],
   });
+  // const addressData = useSelector((state) => state.address);
 
   const navigate = useNavigate();
 

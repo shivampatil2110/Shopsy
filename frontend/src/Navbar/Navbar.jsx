@@ -7,8 +7,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import AddProductDialog from "../ProductsPage/AddProduct";
 import Cookies from "js-cookie";
+import SearchBar from "./SearchBar";
+import logo from "../images/logo.png";
 
-const Navbar = () => {
+const Navbar = ({ onSearch }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [state, setState] = useContext(GlobalContext);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -74,40 +76,19 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <img className="h-8 w-8" src="/logo.png" alt="Logo" />
+              <Link to="/">
+                <img className="h-8 w-8 w-24" src={logo} alt="Logo" />
+              </Link>
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  to="/products"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Home
-                </Link>
-                <Link
-                  to="/products"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Products
-                </Link>
-                <Link
-                  to="/about"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  About
-                </Link>
-                <Link
-                  to="/contact"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Contact
-                </Link>
+                <SearchBar onSearch={onSearch} />
               </div>
             </div>
           </div>
           {state.isAdmin && (
             <button
-              className="text-white rounded-md shadow bg-blue-500 border-2 p-2 ml-80 hover:bg-blue-600"
+              className="text-white rounded-md shadow bg-yellow-500 border-2 p-2 ml-80 hover:bg-yellow-600"
               onClick={handleOpenDialog}
             >
               Add Products

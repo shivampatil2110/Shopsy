@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
+import { useSelector, useDispatch } from "react-redux";
+import { setProducts, addProduct } from "../slices/productsSlice";
 
 const AddProductDialog = ({ isOpen, onClose }) => {
   const [product, setProduct] = useState({
@@ -13,6 +16,8 @@ const AddProductDialog = ({ isOpen, onClose }) => {
   });
   const [categories, setCategories] = useState([]);
   const [isFormValid, setIsFormValid] = useState(true);
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
 
   useEffect(() => {
     async function getCategories() {
@@ -60,7 +65,6 @@ const AddProductDialog = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = async () => {
-    console.log(product);
     try {
       await axios.post("http://localhost:35000/products/addProduct", product, {
         withCredentials: true,
@@ -69,6 +73,17 @@ const AddProductDialog = ({ isOpen, onClose }) => {
           "Content-Type": "application/json",
         },
       });
+      let newProduct = {
+        _id: uuidv4(),
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        stock: product.stock,
+        category: product.category,
+        createdAt: Date.now(),
+        editedAt: Date.now(),
+      };
+      dispatch(addProduct(newProduct));
       toast.success("Product added successfully");
       setProduct({
         name: "",

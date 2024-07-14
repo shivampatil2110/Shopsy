@@ -65,7 +65,7 @@ const ProductCard = ({ product, onClick }) => {
           {truncateText(product.description)}
         </p>
         <button
-          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-500"
+          className="mt-4 bg-yellow-500 text-white py-2 px-4 rounded-md shadow hover:bg-yellow-600 focus:outline-none focus:ring focus:ring-blue-500"
           onClick={updateCartValue}
         >
           Add to Cart

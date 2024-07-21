@@ -157,7 +157,7 @@ const AddProductDialog = ({ isOpen, onClose }) => {
           type="file"
           name="image"
           onChange={handleImageChange}
-          className="block w-full text-sm text-slate-500
+          className="block w-full text-sm text-slate-800
                     file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0
                     file:text-sm file:font-semibold
@@ -168,7 +168,7 @@ const AddProductDialog = ({ isOpen, onClose }) => {
         <div className="flex justify-end space-x-2">
           <button
             onClick={onClose}
-            className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600"
+            className="bg-neutral-200 text-white py-2 px-4 rounded-md hover:bg-neutral-300"
           >
             Cancel
           </button>
@@ -176,8 +176,8 @@ const AddProductDialog = ({ isOpen, onClose }) => {
             onClick={handleSubmit}
             className={`py-2 px-4 rounded-md shadow ${
               isFormValid
-                ? "bg-blue-500 hover:bg-blue-600"
-                : "bg-gray-300 cursor-not-allowed"
+                ? "bg-yellow-500 hover:bg-yellow-600"
+                : "neutral-200 cursor-not-allowed"
             } text-white`}
             disabled={!isFormValid}
           >

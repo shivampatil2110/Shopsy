@@ -54,7 +54,7 @@ const ProductCard = ({ product, onClick }) => {
       onClick={() => handelRedirect(product._id)}
     >
       <img
-        className="w-full h-56 object-cover object-center"
+        className="w-full h-56 object-cover object-center bg-cover"
         src={imageBase64}
         alt={product.name}
       />

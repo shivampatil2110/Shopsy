@@ -31,11 +31,11 @@ const Subnav = () => {
                 to={`/category/${category._id}`}
                 className="text-gray-800 hover:text-gray-600 mx-4"
               >
-                <div className="grid content-center">
-                  <div className="flex">
+                <div className="flex flex-col items-center">
+                  <div>
                     <img src={category.image} alt="" />
                   </div>
-                  <div className="flex">
+                  <div>
                     <p>{category.name}</p>
                   </div>
                 </div>

@@ -11,6 +11,8 @@ const getAllOrders = async (req, res) => {
   try {
     let userId = req.cookies.userId;
 
+    let user = await User.findOne({ _id: userId });
+
     let orders = await Orders.aggregate([
       { $match: { userId: new mongoose.Types.ObjectId(userId) } },
       {
@@ -60,6 +62,8 @@ const getAllOrders = async (req, res) => {
       },
     ]);
 
+    let address = user.address;
+
     res.status(200).send(orders);
   } catch (error) {
     console.log(error);
@@ -102,6 +106,7 @@ const createOrder = async (req, res) => {
     let userId = req.cookies.userId;
 
     let cart = req.body.cart;
+    let shipTo = req.body.addressId;
 
     let totalAmount = 0;
     let itemsArray = [];
@@ -120,6 +125,7 @@ const createOrder = async (req, res) => {
     let order = new Orders({
       userId,
       totalAmount,
+      shipTo,
     });
     let response = await order.save();
 

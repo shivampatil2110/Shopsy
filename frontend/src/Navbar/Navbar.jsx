@@ -71,31 +71,39 @@ const Navbar = ({ onSearch }) => {
   };
 
   return state.isLoggedIn ? (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-slate-900 shadow-md sticky top-0 z-50">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 ">
               <Link to="/">
-                <img className="h-8 w-8 w-24" src={logo} alt="Logo" />
+                <img className="h-8 w-24" src={logo} alt="Logo" />
               </Link>
             </div>
             <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
+              <div className="ml-10 flex items-baseline space-x-4 w-96">
                 <SearchBar onSearch={onSearch} />
               </div>
             </div>
+            <select
+              name=""
+              id=""
+              className="bg-gray-200 rounded-r-lg"
+              style={{ height: `2.6rem` }}
+            >
+              <option value="">Cateogry 1</option>
+            </select>
           </div>
           {state.isAdmin && (
             <button
-              className="text-white rounded-md shadow bg-yellow-500 border-2 p-2 ml-80 hover:bg-yellow-600"
+              className="text-white rounded-md shadow bg-yellow-500 p-2 ml-80 hover:bg-yellow-600"
               onClick={handleOpenDialog}
             >
               Add Products
             </button>
           )}
           <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6 relative">
+            <div className="ml-4 flex items-center md:ml-6 relative text-white">
               <button
                 onClick={goToCart}
                 type="button"

@@ -58,7 +58,7 @@ const ProductInfo = () => {
           <>
             <div className="flex flex-col md:flex-row md:space-x-8">
               <img
-                className="w-full md:w-1/2 h-64 object-cover"
+                className="w-full md:w-1/2 h-64 object-cover bg-cover bg-center"
                 src={product.productImage}
                 alt={product.name}
               />
@@ -70,7 +70,7 @@ const ProductInfo = () => {
                 <p className="text-gray-700 mb-6">{product.description}</p>
                 <button
                   onClick={addToCart}
-                  className="bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-500"
+                  className="bg-yellow-500 text-white py-2 px-4 rounded-md shadow hover:bg-yellow-600 focus:outline-none focus:ring focus:ring-blue-500"
                 >
                   Add to Cart
                 </button>

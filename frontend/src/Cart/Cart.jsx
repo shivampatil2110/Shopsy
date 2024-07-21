@@ -4,12 +4,15 @@ import { GlobalContext } from "../util/GlobalState";
 import { toast } from "react-toastify";
 import Spinner from "../util/Spinner";
 import Navbar from "../Navbar/Navbar";
+import AddressChoice from "./AddressChoice";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState();
   const [loading, setLoading] = useState(true);
   const [state, setState] = useContext(GlobalContext);
+  const [openAddressSelect, setOpenAddressSelect] = useState(false);
+  const [addressId, setAddressId] = useState("");
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -48,7 +51,7 @@ const Cart = () => {
     try {
       await axios.post(
         "http://localhost:35000/orders/createOrder",
-        { cart },
+        { cart, addressId: addressId },
         {
           withCredentials: true,
         }
@@ -84,19 +87,30 @@ const Cart = () => {
     setState({ ...state, cart: quantity });
   };
 
+  const handleDataFromChild = (addressId) => {
+    setOpenAddressSelect(false);
+    setAddressId(addressId);
+  };
+
+  const selectAddress = () => {
+    setOpenAddressSelect(true);
+  };
+
   return (
     <>
       <Navbar></Navbar>
       <div className="container mx-auto p-4 ">
-        <h1 className="text-2xl font-bold mb-4">Shopping Cart</h1>
         {loading ? (
           <div className="flex justify-center">
             <Spinner />
           </div>
         ) : cart.length === 0 ? (
           <p className="text-gray-600">Your cart is empty</p>
+        ) : openAddressSelect ? (
+          <AddressChoice sendDataToParent={handleDataFromChild} />
         ) : (
           <div className="space-y-4">
+            <h1 className="text-2xl font-bold mb-4">Shopping Cart</h1>
             {cart.map((product) => (
               <div
                 key={product._id}
@@ -141,11 +155,24 @@ const Cart = () => {
                 Total: Rs {totalPrice.toFixed(2)}
               </p>
               <button
-                className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
-                onClick={createOrder}
+                className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md mx-2 hover:bg-green-600"
+                onClick={selectAddress}
               >
-                Checkout
+                {addressId == "" ? "Select Address" : "Change Address"}
               </button>
+              {addressId != "" && (
+                <button
+                  className={`py-2 px-4 rounded-md shadow ${
+                    addressId != ""
+                      ? "bg-yellow-500 hover:bg-yellow-600"
+                      : "bg-yellow-500 neutral-200 cursor-not-allowed"
+                  } text-white`}
+                  disabled={addressId == ""}
+                  onClick={createOrder}
+                >
+                  Checkout
+                </button>
+              )}
             </div>
           </div>
           // <></>

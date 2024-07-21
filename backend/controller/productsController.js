@@ -86,10 +86,22 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const searchProduct = async (req, res) => {
+  try {
+    let search = req.query.q.toLowerCase();
+    let product = await Products.find({ name: new RegExp(search, "i") });
+    res.status(200).send(product);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ msg: "Product not found" });
+  }
+};
+
 module.exports = {
   getAllProducts,
   addProduct,
   getProduct,
   editProduct,
   deleteProduct,
+  searchProduct,
 };

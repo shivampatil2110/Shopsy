@@ -19,6 +19,9 @@ const AddAddress = () => {
     state: "Rajasthan",
     instructions: "",
   });
+  const addressFromPayload = useSelector((state) => state.address);
+  const dispatch = useDispatch();
+
   const [location, setLocation] = useState({
     country: [],
     state: [],

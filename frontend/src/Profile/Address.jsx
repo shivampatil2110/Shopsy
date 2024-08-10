@@ -4,11 +4,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { setAddress } from "../slices/addressSlice"; // Adjust the path
+import { addAddressToPayload } from "../slices/addressSlice"; // Adjust the path
 
 const Address = () => {
-  let [address, setAddress] = useState([]);
-  const addressData = useSelector((state) => state.address);
+  let [addresses, setAddresses] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,7 +24,7 @@ const Address = () => {
             withCredentials: true,
           }
         );
-        setAddress(response.data.address);
+        setAddresses(response.data.address);
       } catch (error) {
         toast.error("Error getting user address");
       }
@@ -42,7 +41,7 @@ const Address = () => {
           withCredentials: true,
         }
       );
-      setAddress(response.data.address);
+      setAddresses(response.data.address);
       toast.success("Address deleted successfully");
     } catch (error) {
       toast.error("Error deleting address");
@@ -50,9 +49,13 @@ const Address = () => {
   }
 
   function editAddress(address) {
-    dispatch(setAddress(address));
-    navigate("/profile/address/addAddress");
-    console.log(address);
+    try {
+      dispatch(addAddressToPayload(address));
+      navigate("/profile/address/addAddress");
+      console.log(address);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -68,7 +71,7 @@ const Address = () => {
             <div className="text-xl  p-1">Add Address</div>
           </div>
         </div>
-        {address.map((address) => (
+        {addresses.map((address) => (
           <div className="h-70 w-60 border-2 border-gray-300 rounded drop-shadow-md">
             <div className="flex items-start flex-col p-4">
               <p className="font-semibold">{address.fullName}</p>

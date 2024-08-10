@@ -97,6 +97,17 @@ const searchProduct = async (req, res) => {
   }
 };
 
+const getProductByCategory = async (req, res) => {
+  try {
+    let categoryId = req.query.categoryId;
+    let products = await Products.find({ categoryId: categoryId });
+    res.send(products);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ msg: "Product not found" });
+  }
+};
+
 module.exports = {
   getAllProducts,
   addProduct,
@@ -104,4 +115,5 @@ module.exports = {
   editProduct,
   deleteProduct,
   searchProduct,
+  getProductByCategory,
 };

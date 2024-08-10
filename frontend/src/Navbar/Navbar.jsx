@@ -9,12 +9,17 @@ import AddProductDialog from "../ProductsPage/AddProduct";
 import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import logo from "../images/logo.png";
+import { useSelector, useDispatch } from "react-redux";
+import { setProducts, addProduct } from "../slices/productsSlice";
 
 const Navbar = ({ onSearch }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [state, setState] = useContext(GlobalContext);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -38,6 +43,19 @@ const Navbar = ({ onSearch }) => {
         state.isAdmin = Cookies.get("isAdmin");
       }
     };
+    async function fetchCategories() {
+      try {
+        let response = await axios.get(
+          "http://localhost:35000/categories/getCategories",
+          { withCredentials: true }
+        );
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    }
+
+    fetchCategories();
     getCartSize();
     checkUserAdmin();
   }, []);
@@ -61,6 +79,25 @@ const Navbar = ({ onSearch }) => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  async function fetchProductByCategory(event) {
+    const selectedOption = event.target.options[event.target.selectedIndex];
+    const value = selectedOption.value;
+    const key = selectedOption.id;
+    try {
+      let response = await axios.get(
+        "http://localhost:35000/products/getProductByCategory",
+        {
+          withCredentials: true,
+          params: { categoryId: key },
+        }
+      );
+      setSelectedCategory(value);
+      dispatch(setProducts(response.data));
+    } catch (error) {
+      toast.error("Error fetching product category:", error);
+    }
+  }
 
   const logout = () => {
     Cookies.remove("isAdmin");
@@ -86,12 +123,23 @@ const Navbar = ({ onSearch }) => {
               </div>
             </div>
             <select
-              name=""
-              id=""
               className="bg-gray-200 rounded-r-lg"
-              style={{ height: `2.6rem` }}
+              style={{ height: `2.6rem`, fieldSizing: "content" }}
+              onChange={fetchProductByCategory}
+              value={selectedCategory}
             >
-              <option value="">Cateogry 1</option>
+              <option value="" disabled hidden>
+                All
+              </option>
+              {categories.map((category) => (
+                <option
+                  value={category.name}
+                  key={category._id}
+                  id={category._id}
+                >
+                  {category.name}
+                </option>
+              ))}
             </select>
           </div>
           {state.isAdmin && (

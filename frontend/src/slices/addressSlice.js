@@ -2,13 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const addressSlice = createSlice({
   name: "address",
-  initialState: {},
+  initialState: [],
   reducers: {
-    setAddress: (state, action) => {
-      return action.payload;
+    addAddressToPayload: (state, action) => {
+      console.log("Action Payload:", action.payload);
+      state.push(action.payload);
+      console.log("Updated State:", state);
     },
   },
 });
 
-export const { setAddress } = addressSlice.actions;
+export const { addAddressToPayload } = addressSlice.actions;
 export default addressSlice.reducer;

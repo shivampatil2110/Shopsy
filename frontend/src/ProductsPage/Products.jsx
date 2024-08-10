@@ -42,11 +42,15 @@ const Products = () => {
           <>
             <Carousel productData={products} />
             <div className="h-20"></div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {products.map((product) => (
-                <ProductCard product={product} key={product._id} />
-              ))}
-            </div>
+            {products.length === 0 ? (
+              <p className="text-4xl">No products found</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {products.map((product) => (
+                  <ProductCard product={product} key={product._id} />
+                ))}
+              </div>
+            )}
           </>
         ) : (
           <Loader />

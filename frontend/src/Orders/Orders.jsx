@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { GlobalContext } from "../util/GlobalState";
 import Spinner from "../util/Spinner";
 import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 const Orders = () => {
   const [orders, setOrders] = useState();
   const [loading, setLoading] = useState(true);
+  const [state, setState] = useContext(GlobalContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,6 +55,25 @@ const Orders = () => {
       a.remove();
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async function updateOrderStatus(event, orderId) {
+    const selectedOption = event.target.options[event.target.selectedIndex];
+    const value = selectedOption.value;
+    try {
+      let response = await axios.patch(
+        "http://localhost:35000/orders/editOrder",
+        { orderId, value },
+        { withCredentials: true }
+      );
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, status: value } : order
+        )
+      );
+    } catch (error) {
+      toast.error(error);
     }
   }
 
@@ -140,12 +161,30 @@ const Orders = () => {
 
                 {/* Buttons */}
                 <div className="flex space-x-4">
-                  <button className="bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600">
-                    View Return/Refund Status
-                  </button>
-                  <button className="bg-gray-200 py-2 px-4 rounded-md hover:bg-gray-300">
-                    Leave seller feedback
-                  </button>
+                  {state.isAdmin != "true" && (
+                    <button className="bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600">
+                      Leave seller feedback
+                    </button>
+                  )}
+
+                  {state.isAdmin == "true" && (
+                    <select
+                      className="bg-gray-200 py-2 px-4 rounded-md hover:bg-gray-300"
+                      onChange={(e) => updateOrderStatus(e, order._id)}
+                      disabled={
+                        order.status === "delivered" ||
+                        order.status === "Delivered"
+                      }
+                    >
+                      <option value="Update Status">Update Status</option>
+                      {order.status === "confirmed" && (
+                        <option value="shipped">Shipped</option>
+                      )}
+                      {order.status === "shipped" && (
+                        <option value="delivered">Delivered</option>
+                      )}
+                    </select>
+                  )}
                 </div>
               </div>
             </div>

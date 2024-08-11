@@ -20,7 +20,8 @@ const ProductCard = ({ product, onClick }) => {
     }
   }, []);
 
-  async function updateCartValue() {
+  async function updateCartValue(e) {
+    e.stopPropagation();
     try {
       setState({ ...state, cart: state.cart + 1 });
       let quantity = { quantity: 1 };

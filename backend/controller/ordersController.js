@@ -10,10 +10,7 @@ const moment = require("moment");
 const getAllOrders = async (req, res) => {
   try {
     let userId = req.cookies.userId;
-
-    let user = await User.findOne({ _id: userId });
-
-    let orders = await Orders.aggregate([
+    let aggregateArr = [
       { $match: { userId: new mongoose.Types.ObjectId(userId) } },
       {
         $lookup: {
@@ -60,7 +57,16 @@ const getAllOrders = async (req, res) => {
           },
         },
       },
-    ]);
+    ];
+    if (req.cookies.isAdmin == "true") {
+      aggregateArr.shift();
+      let orders = await Orders.aggregate(aggregateArr);
+      res.status(200).send(orders);
+      return;
+    }
+    let user = await User.findOne({ _id: userId });
+
+    let orders = await Orders.aggregate(aggregateArr);
 
     let address = user.address;
 
@@ -99,7 +105,16 @@ const getOrder = async (req, res) => {
   }
 };
 
-const editOrder = () => {};
+const editOrder = async (req, res) => {
+  try {
+    let { orderId, value } = req.body;
+    await Orders.findByIdAndUpdate(orderId, { status: value });
+    res.send({ msg: "Order updated" });
+  } catch (error) {
+    console.error(error);
+    res.send(error.message);
+  }
+};
 
 const createOrder = async (req, res) => {
   try {

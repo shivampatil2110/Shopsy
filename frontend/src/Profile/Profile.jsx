@@ -9,6 +9,7 @@ const Profile = () => {
     email: "",
     username: "",
     since: "",
+    image: "",
     admin: false,
   });
   const navigate = useNavigate();
@@ -40,6 +41,18 @@ const Profile = () => {
     navigate("/orders");
   }
 
+  async function changeProfilePicture(e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setUser({ ...user, image: reader.result });
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  }
+
   return (
     <>
       {/* <pre>{{ user }}</pre> */}
@@ -50,6 +63,7 @@ const Profile = () => {
             src="https://via.placeholder.com/40"
             alt="Avatar"
             className="w-52 h-52 rounded-full cursor-pointer self-center mb-72"
+            onClick={changeProfilePicture}
           />
         </div>
         <hr width="1" size="500" />
@@ -102,6 +116,14 @@ const Profile = () => {
                 onClick={goToOrders}
               >
                 Your Orders
+              </button>
+            </div>
+            <div className="flex flex-rox min-w-full mt-1">
+              <button
+                className="text-white rounded-md shadow bg-yellow-500 py-2 border-2 hover:bg-yellow-600 w-1/2 m-auto"
+                onClick={changeProfilePicture}
+              >
+                Update Profile
               </button>
             </div>
           </div>

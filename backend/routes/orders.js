@@ -18,7 +18,7 @@ router.post("/createOrder", createOrder);
 
 router.post("/generateInvoice", generateInvoice);
 
-router.put("/editOrder", isAdmin, editOrder);
+router.patch("/editOrder", isAdmin, editOrder);
 
 router.delete("/deleteOrder", deleteOrder);
 

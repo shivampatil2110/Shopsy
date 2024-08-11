@@ -142,7 +142,7 @@ const Navbar = ({ onSearch }) => {
               ))}
             </select>
           </div>
-          {state.isAdmin && (
+          {state.isAdmin == "true" && (
             <button
               className="text-white rounded-md shadow bg-yellow-500 p-2 ml-80 hover:bg-yellow-600"
               onClick={handleOpenDialog}

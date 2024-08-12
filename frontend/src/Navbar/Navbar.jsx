@@ -26,9 +26,12 @@ const Navbar = ({ onSearch }) => {
   useEffect(() => {
     const getCartSize = async () => {
       try {
-        let response = await axios.get("http://localhost:35000/cart/getItems", {
-          withCredentials: true,
-        });
+        let response = await axios.get(
+          `${process.env.REACT_APP_SERVER_ADDRESS}/cart/getItems`,
+          {
+            withCredentials: true,
+          }
+        );
         let quantity = 0;
         for (let item of response.data) {
           quantity += item.quantity;
@@ -46,7 +49,7 @@ const Navbar = ({ onSearch }) => {
     async function fetchCategories() {
       try {
         let response = await axios.get(
-          "http://localhost:35000/categories/getCategories",
+          `${process.env.REACT_APP_SERVER_ADDRESS}/categories/getCategories`,
           { withCredentials: true }
         );
         setCategories(response.data);
@@ -86,7 +89,7 @@ const Navbar = ({ onSearch }) => {
     const key = selectedOption.id;
     try {
       let response = await axios.get(
-        "http://localhost:35000/products/getProductByCategory",
+        `${process.env.REACT_APP_SERVER_ADDRESS}/products/getProductByCategory`,
         {
           withCredentials: true,
           params: { categoryId: key },

@@ -66,13 +66,17 @@ const AddProductDialog = ({ isOpen, onClose }) => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:35000/products/addProduct", product, {
-        withCredentials: true,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_ADDRESS}/products/addProduct`,
+        product,
+        {
+          withCredentials: true,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
       let newProduct = {
         _id: uuidv4(),
         name: product.name,

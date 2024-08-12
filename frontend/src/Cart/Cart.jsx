@@ -18,7 +18,7 @@ const Cart = () => {
     const fetchCartItems = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:35000/cart/getItems",
+          `${process.env.REACT_APP_SERVER_ADDRESS}/cart/getItems`,
           { withCredentials: true }
         );
         setCart(response.data);
@@ -50,7 +50,7 @@ const Cart = () => {
   const createOrder = async () => {
     try {
       await axios.post(
-        "http://localhost:35000/orders/createOrder",
+        `${process.env.REACT_APP_SERVER_ADDRESS}/orders/createOrder`,
         { cart, addressId: addressId },
         {
           withCredentials: true,
@@ -58,9 +58,12 @@ const Cart = () => {
       );
       setCart([]);
       toast.success("Order created successfully");
-      await axios.delete("http://localhost:35000/cart/deleteCart", {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `${process.env.REACT_APP_SERVER_ADDRESS}/cart/deleteCart`,
+        {
+          withCredentials: true,
+        }
+      );
     } catch (error) {
       toast.error("Error creating order");
     }

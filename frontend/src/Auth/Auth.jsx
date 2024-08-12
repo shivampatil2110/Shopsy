@@ -38,7 +38,7 @@ const Auth = () => {
       };
       try {
         let response = await axios.post(
-          "http://localhost:35000/auth/login",
+          `${process.env.REACT_APP_SERVER_ADDRESS}/auth/login`,
           login,
           {
             withCredentials: true,
@@ -63,7 +63,7 @@ const Auth = () => {
         };
         try {
           let response = await axios.post(
-            "http://localhost:35000/auth/register",
+            `${process.env.REACT_APP_SERVER_ADDRESS}/auth/register`,
             signup,
             {
               withCredentials: true,
@@ -84,9 +84,12 @@ const Auth = () => {
 
   const getCartSize = async () => {
     try {
-      let response = await axios.get("http://localhost:35000/cart/getItems", {
-        withCredentials: true,
-      });
+      let response = await axios.get(
+        `${process.env.REACT_APP_SERVER_ADDRESS}/cart/getItems`,
+        {
+          withCredentials: true,
+        }
+      );
       let quantity = 0;
       for (let item of response.data) {
         quantity += item.quantity;

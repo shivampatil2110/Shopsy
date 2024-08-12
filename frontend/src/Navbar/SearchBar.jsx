@@ -17,7 +17,7 @@ const SearchBar = ({ onSearch }) => {
       if (debouncedQuery) {
         try {
           const response = await axios.get(
-            "http://localhost:35000/products/searchProduct",
+            `${process.env.REACT_APP_SERVER_ADDRESS}/products/searchProduct`,
             {
               withCredentials: true,
               params: { q: debouncedQuery },

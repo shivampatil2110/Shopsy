@@ -19,7 +19,7 @@ const Address = () => {
     async function getUserAddress() {
       try {
         let response = await axios.get(
-          "http://localhost:35000/user/getAddress",
+          `${process.env.REACT_APP_SERVER_ADDRESS}/user/getAddress`,
           {
             withCredentials: true,
           }
@@ -35,7 +35,7 @@ const Address = () => {
   async function deleteAddress(addressId) {
     try {
       let response = await axios.post(
-        "http://localhost:35000/user/deleteAddress",
+        `${process.env.REACT_APP_SERVER_ADDRESS}/user/deleteAddress`,
         { addressId },
         {
           withCredentials: true,

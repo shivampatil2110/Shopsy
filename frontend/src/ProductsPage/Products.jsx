@@ -19,7 +19,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         let response = await axios.get(
-          "http://localhost:35000/products/getAllProducts",
+          `${process.env.REACT_APP_SERVER_ADDRESS}/products/getAllProducts`,
           { withCredentials: true }
         );
         // setProducts(response.data);

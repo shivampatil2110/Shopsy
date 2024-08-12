@@ -18,7 +18,7 @@ const Profile = () => {
     async function getUser() {
       try {
         let response = await axios.get(
-          "http://localhost:35000/user/userProfile",
+          `${process.env.REACT_APP_SERVER_ADDRESS}/user/userProfile`,
           { withCredentials: true }
         );
         setUser({

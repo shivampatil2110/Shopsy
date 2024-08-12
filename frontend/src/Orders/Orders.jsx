@@ -17,7 +17,7 @@ const Orders = () => {
     async function getOrders() {
       try {
         let response = await axios.get(
-          "http://localhost:35000/orders/getAllOrders",
+          `${process.env.REACT_APP_SERVER_ADDRESS}/orders/getAllOrders`,
           { withCredentials: true }
         );
         setOrders(response.data);
@@ -40,7 +40,7 @@ const Orders = () => {
     try {
       console.log(order);
       let response = await axios.post(
-        "http://localhost:35000/orders/generateInvoice",
+        `${process.env.REACT_APP_SERVER_ADDRESS}/orders/generateInvoice`,
         order,
         {
           withCredentials: true,
@@ -63,7 +63,7 @@ const Orders = () => {
     const value = selectedOption.value;
     try {
       let response = await axios.patch(
-        "http://localhost:35000/orders/editOrder",
+        `${process.env.REACT_APP_SERVER_ADDRESS}/orders/editOrder`,
         { orderId, value },
         { withCredentials: true }
       );

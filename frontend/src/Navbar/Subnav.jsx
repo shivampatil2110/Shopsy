@@ -12,7 +12,7 @@ const Subnav = () => {
     async function fetchCategories() {
       try {
         let response = await axios.get(
-          "http://localhost:35000/categories/getCategories",
+          `${process.env.REACT_APP_SERVER_ADDRESS}/categories/getCategories`,
           { withCredentials: true }
         );
         setCategories(response.data);
@@ -26,7 +26,7 @@ const Subnav = () => {
   async function fetchProductCategory(categoryId) {
     try {
       let response = await axios.get(
-        "http://localhost:35000/products/getProductByCategory",
+        `${process.env.REACT_APP_SERVER_ADDRESS}/products/getProductByCategory`,
         {
           withCredentials: true,
           params: { categoryId },

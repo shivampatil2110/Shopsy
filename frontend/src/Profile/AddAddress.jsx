@@ -54,7 +54,7 @@ const AddAddress = () => {
     e.preventDefault();
     try {
       let response = await axios.post(
-        "http://localhost:35000/user/addAddress",
+        `${process.env.REACT_APP_SERVER_ADDRESS}/user/addAddress`,
         address,
         { withCredentials: true }
       );

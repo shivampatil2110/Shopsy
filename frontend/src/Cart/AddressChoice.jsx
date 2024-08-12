@@ -13,7 +13,7 @@ const AddressChoice = ({ sendDataToParent }) => {
     async function getUserAddress() {
       try {
         const response = await axios.get(
-          "http://localhost:35000/user/getAddress",
+          `${process.env.REACT_APP_SERVER_ADDRESS}/user/getAddress`,
           { withCredentials: true }
         );
         setAddress(response.data.address);

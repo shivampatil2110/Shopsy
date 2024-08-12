@@ -43,19 +43,27 @@ const login = async (req, res) => {
     const token = jwt.sign(payload, "Secret", { expiresIn: "6h" });
     res.cookie("userId", user.id, {
       maxAge: 21600000,
-      httpOnly: false,
+      secure: true,
+      sameSite: "None",
+      httpOnly: true,
     });
     res.cookie("isAdmin", user.isAdmin, {
       maxAge: 21600000,
-      httpOnly: false,
+      secure: true,
+      sameSite: "None",
+      httpOnly: true,
     });
     res.cookie("userEmail", user.email, {
       maxAge: 21600000,
-      httpOnly: false,
+      secure: true,
+      sameSite: "None",
+      httpOnly: true,
     });
     res.cookie("jwtToken", token, {
       maxAge: 21600000,
-      httpOnly: false,
+      secure: true,
+      sameSite: "None",
+      httpOnly: true,
     }); // secure: true if using HTTPS
     res.status(200).json({ token, isAdmin: user.isAdmin });
   } catch (error) {

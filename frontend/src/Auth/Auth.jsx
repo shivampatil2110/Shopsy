@@ -30,6 +30,7 @@ const Auth = () => {
   }, []);
 
   const handleSubmit = async (e) => {
+    console.log(process.env.REACT_APP_SERVER_ADDRESS);
     e.preventDefault();
     if (isLogin) {
       let login = {

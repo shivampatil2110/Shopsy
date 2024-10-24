@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://shopsy-two.vercel.app/",
+    origin: "https://shopsy-two.vercel.app",
     credentials: true,
   })
 );

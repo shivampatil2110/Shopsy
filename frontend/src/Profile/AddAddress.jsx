@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
-import { Country, State, City } from "country-state-city";
+import { Country, State } from "country-state-city";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { setAddressToNull } from "../slices/addressSlice";
+import Cookies from "js-cookie";
 
 const AddAddress = () => {
   const [address, setAddress] = useState({
@@ -21,7 +23,6 @@ const AddAddress = () => {
   });
   const addressFromPayload = useSelector((state) => state.address);
   const dispatch = useDispatch();
-
   const [location, setLocation] = useState({
     country: [],
     state: [],
@@ -35,6 +36,12 @@ const AddAddress = () => {
     setLocation((prevLocation) => ({ ...prevLocation, country: country }));
     let state = State.getStatesOfCountry("IN");
     setLocation((prevLocation) => ({ ...prevLocation, state: state }));
+    if (addressFromPayload != null) {
+      setAddress(addressFromPayload);
+    }
+    return () => {
+      dispatch(setAddressToNull());
+    };
   }, []);
 
   function handelChanges(e) {
@@ -53,13 +60,26 @@ const AddAddress = () => {
   async function handelSubmit(e) {
     e.preventDefault();
     try {
-      let response = await axios.post(
-        `${process.env.REACT_APP_SERVER_ADDRESS}/user/addAddress`,
-        address,
-        { withCredentials: true }
-      );
-      toast.success("Address added successfully");
-      navigate("/profile/address");
+      if (addressFromPayload != null) {
+        let obj = {};
+        obj.address = address;
+        obj.userId = Cookies.get("userId");
+        await axios.put(
+          `${process.env.REACT_APP_SERVER_ADDRESS}/user/editAddress`,
+          obj,
+          { withCredentials: true }
+        );
+        toast.success("Address updated successfully");
+        navigate("/profile/address");
+      } else {
+        let response = await axios.post(
+          `${process.env.REACT_APP_SERVER_ADDRESS}/user/addAddress`,
+          address,
+          { withCredentials: true }
+        );
+        toast.success("Address added successfully");
+        navigate("/profile/address");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -106,6 +126,7 @@ const AddAddress = () => {
               <input
                 type="text"
                 id="fullName"
+                value={address.fullName}
                 className="block w-full p-2 border border-gray-300 rounded"
                 onChange={handelChanges}
               />
@@ -120,6 +141,7 @@ const AddAddress = () => {
               <input
                 type="number"
                 id="mobile"
+                value={address.mobile}
                 className="block w-full p-2 border border-gray-300 rounded"
                 onChange={handelChanges}
               />
@@ -137,6 +159,7 @@ const AddAddress = () => {
               <input
                 type="number"
                 id="pincode"
+                value={address.pincode}
                 className="block w-full p-2 border border-gray-300 rounded"
                 onChange={handelChanges}
               />
@@ -151,6 +174,7 @@ const AddAddress = () => {
               <input
                 type="text"
                 id="address"
+                value={address.address}
                 className="block w-full p-2 border border-gray-300 rounded"
                 onChange={handelChanges}
               />
@@ -165,6 +189,7 @@ const AddAddress = () => {
               <input
                 type="text"
                 id="area"
+                value={address.area}
                 className="block w-full p-2 border border-gray-300 rounded"
                 onChange={handelChanges}
               />
@@ -179,6 +204,7 @@ const AddAddress = () => {
               <input
                 type="text"
                 id="landmark"
+                value={address.landmark}
                 className="block w-full p-2 border border-gray-300 rounded"
                 onChange={handelChanges}
               />
@@ -195,6 +221,7 @@ const AddAddress = () => {
                 <input
                   type="text"
                   id="city"
+                  value={address.city}
                   className="block w-full p-2 border border-gray-300 rounded"
                   onChange={handelChanges}
                 />
@@ -239,6 +266,7 @@ const AddAddress = () => {
               <input
                 type="text"
                 id="instructions"
+                value={address.instructions}
                 className="block w-full p-2 border border-gray-300 rounded"
                 onChange={handelChanges}
               />
@@ -251,7 +279,7 @@ const AddAddress = () => {
               className="w-full bg-yellow-500 text-white p-2 rounded font-medium"
               onClick={handelSubmit}
             >
-              Add address
+              {addressFromPayload ? "Edit Address" : "Add address"}
             </button>
           </form>
         </div>

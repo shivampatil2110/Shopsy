@@ -44,4 +44,29 @@ const deleteAddress = async (req, res) => {
   }
 };
 
-module.exports = { userProfile, addAddress, getAddress, deleteAddress };
+const editAddress = async (req, res) => {
+  try {
+    let address = req.body;
+    let user = await User.findById(address.userId);
+    let arr = [...user.address];
+    arr.forEach(async (el) => {
+      let id = el._id.toString();
+      if (id == address.address._id) {
+        await Object.assign(el, address.address);
+      }
+    });
+    user.address = arr;
+    await User.findByIdAndUpdate(address.userId, user);
+    res.status(200).send({ msg: "Updated successfully" });
+  } catch (error) {
+    res.status(500).send({ msg: "Error updating address" });
+  }
+};
+
+module.exports = {
+  userProfile,
+  addAddress,
+  getAddress,
+  deleteAddress,
+  editAddress,
+};

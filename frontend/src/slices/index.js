@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
 import productsReducer from "./productsSlice";
-import addressSlice from "./productsSlice";
+import addressReducer from "./addressSlice";
 
 const rootReducer = combineReducers({
   products: productsReducer,
-  address: addressSlice,
+  address: addressReducer,
   // Add more reducers here
 });
 

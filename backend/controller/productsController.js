@@ -37,9 +37,9 @@ const addProduct = async (req, res) => {
       categoryId: categoryType.id,
       // productImage: imageBase64,
     });
-    await product.save();
+    let result = await product.save();
 
-    res.status(200).send({ status: "successfully added" });
+    res.status(200).send({ status: "successfully added", result });
   } catch (error) {
     res.status(500).send(error.message);
   }

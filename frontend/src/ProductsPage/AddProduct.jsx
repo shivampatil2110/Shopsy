@@ -23,7 +23,7 @@ const AddProductDialog = ({ isOpen, onClose }) => {
     async function getCategories() {
       try {
         let response = await axios.get(
-          "http://localhost:35000/categories/getCategories",
+          `${process.env.REACT_APP_SERVER_ADDRESS}/categories/getCategories`,
           { withCredentials: true }
         );
         setCategories(response.data);
@@ -66,7 +66,7 @@ const AddProductDialog = ({ isOpen, onClose }) => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post(
+      let res = await axios.post(
         `${process.env.REACT_APP_SERVER_ADDRESS}/products/addProduct`,
         product,
         {
@@ -77,17 +77,8 @@ const AddProductDialog = ({ isOpen, onClose }) => {
           },
         }
       );
-      let newProduct = {
-        _id: uuidv4(),
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        stock: product.stock,
-        category: product.category,
-        createdAt: Date.now(),
-        editedAt: Date.now(),
-      };
-      dispatch(addProduct(newProduct));
+
+      dispatch(addProduct(res.data.result));
       toast.success("Product added successfully");
       setProduct({
         name: "",

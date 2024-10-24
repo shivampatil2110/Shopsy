@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+let retry_count = 0;
 
 const connectDB = async () => {
   const uri =
@@ -7,6 +8,14 @@ const connectDB = async () => {
     await mongoose.connect(uri);
     console.log("Connected to MongoDB with Mongoose");
   } catch (e) {
+    if (retry_count < 3) {
+      console.log(
+        "Error connecting to Mongo retrying for " + retry_count + 1 + " time"
+      );
+      retry_count++;
+      connectDB();
+      return;
+    }
     console.error("Failed to connect to MongoDB", e);
     process.exit(1);
   }

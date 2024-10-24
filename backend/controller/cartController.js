@@ -67,7 +67,7 @@ const getItems = async (req, res) => {
 
     res.status(200).send(cartItems);
   } catch (error) {
-    res.send(404).send({ msg: "No items found in the cart" });
+    res.status(404).send({ msg: "No items found in the cart" });
   }
 };
 

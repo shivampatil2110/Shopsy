@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://shopsy-50z4xt2qc-shivampatil2110s-projects.vercel.app", // Replace with your client’s origin
+    origin: "https://shopsy-two.vercel.app/",
     credentials: true,
   })
 );

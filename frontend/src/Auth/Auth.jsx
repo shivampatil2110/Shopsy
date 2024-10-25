@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../util/GlobalState";
 import Cookies from "js-cookie";
 import login_bg from "../images/login_bg.jpg";
-import { FaEye } from "react-icons/fa6";
+import { GoEyeClosed } from "react-icons/go";
+import { RxEyeOpen } from "react-icons/rx";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -122,7 +123,7 @@ const Auth = () => {
       <img
         src={login_bg}
         alt=""
-        className=" absolute -z-10 overflow-y-hidden blur-sm"
+        className=" absolute -z-10 overflow-y-hidden blur-sm h-screen m-0 w-screen"
       />
       <div className="min-h-screen flex items-center justify-center">
         <div className="bg-gray-300 p-8 rounded-lg shadow-lg w-full max-w-md ">
@@ -189,7 +190,11 @@ const Auth = () => {
                     setShowPassword(!showPassword);
                   }}
                 >
-                  <FaEye size={25} />
+                  {showPassword ? (
+                    <GoEyeClosed size={25} />
+                  ) : (
+                    <RxEyeOpen size={25} />
+                  )}
                 </button>
               </div>
             </div>
@@ -220,7 +225,11 @@ const Auth = () => {
                       setShowPassword(!showPassword);
                     }}
                   >
-                    <FaEye size={25} />
+                    {showPassword ? (
+                      <GoEyeClosed size={25} />
+                    ) : (
+                      <RxEyeOpen size={25} />
+                    )}
                   </button>
                 </div>
               </div>

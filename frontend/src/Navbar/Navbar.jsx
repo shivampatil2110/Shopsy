@@ -11,6 +11,7 @@ import SearchBar from "./SearchBar";
 import logo from "../images/logo.png";
 import { useSelector, useDispatch } from "react-redux";
 import { setProducts, addProduct } from "../slices/productsSlice";
+import { updateProfile } from "../slices/userSlice";
 
 const Navbar = ({ onSearch }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,7 @@ const Navbar = ({ onSearch }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  let profile = useSelector((pro) => pro?.user);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -57,10 +59,22 @@ const Navbar = ({ onSearch }) => {
         console.error("Error fetching categories:", error);
       }
     }
+    async function getUserProfile() {
+      try {
+        let user = await axios.get(
+          `${process.env.REACT_APP_SERVER_ADDRESS}/user/userProfile`,
+          { withCredentials: true }
+        );
+        dispatch(updateProfile(user.data.userImage));
+      } catch (error) {
+        toast.error("Cannot get user profile");
+      }
+    }
 
     fetchCategories();
     getCartSize();
     checkUserAdmin();
+    getUserProfile();
   }, []);
 
   const toggleMenu = () => {
@@ -198,7 +212,7 @@ const Navbar = ({ onSearch }) => {
           </div>
           <div>
             <img
-              src="https://via.placeholder.com/40"
+              src={!profile ? "https://via.placeholder.com/40" : profile}
               alt="Avatar"
               className="w-10 h-10 rounded-full cursor-pointer"
               onClick={toggleDropdown}

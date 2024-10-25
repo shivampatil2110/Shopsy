@@ -22,11 +22,11 @@ const Loader = () => {
       <div className="relative w-full max-w-xl">
         <div className="h-2 bg-gray-200 rounded-full">
           <div
-            className="h-2 bg-blue-500 rounded-full transition-all duration-500"
+            className="h-2 bg-yellow-500 rounded-full transition-all duration-500"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
-        <p className="text-blue-500 text-lg font-semibold mt-2 text-center">
+        <p className="text-black-500 text-lg font-semibold mt-2 text-center">
           {progress < 100 ? "Loading..." : "Loaded"}
         </p>
       </div>

@@ -165,7 +165,7 @@ const createOrder = async (req, res) => {
 const deleteOrder = async (req, res) => {};
 
 const generateInvoice = async (req, res) => {
-  const order = req.body;
+  const { order, userId } = req.body;
   const products = [];
   for (let product of order.products) {
     let obj = {};
@@ -175,22 +175,33 @@ const generateInvoice = async (req, res) => {
     obj.amount = product.totalPrice;
     products.push(obj);
   }
-  const invoice = {
-    shipping: {
-      name: "John Doe",
-      address: "1234 Main Street",
-      city: "San Francisco",
-      state: "CA",
-      country: "USA",
-      postal_code: 94111,
-    },
-    items: products,
-    subtotal: order.totalAmount,
-    paid: 0,
-    invoice_nr: order._id,
-    date: moment().format("YYYY-MM-DD HH:mm:ss"),
-  };
-  createInvoice(invoice, "invoice.pdf", res);
+  try {
+    let user = await User.findById(userId);
+    let arr = [...user.address];
+    arr.forEach(async (el) => {
+      let id = el._id.toString();
+      if (id == order.shipTo) {
+        const invoice = {
+          shipping: {
+            name: `${user.username}`,
+            address: `${el.address}`,
+            city: `${el.city}`,
+            state: `${el.state}`,
+            country: `${el.country}`,
+            postal_code: `${el.pincode}`,
+          },
+          items: products,
+          subtotal: order.totalAmount,
+          paid: 0,
+          invoice_nr: order._id,
+          date: moment().format("YYYY-MM-DD HH:mm:ss"),
+        };
+        createInvoice(invoice, "invoice.pdf", res);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = {

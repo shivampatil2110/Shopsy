@@ -6,6 +6,7 @@ const {
   getAddress,
   deleteAddress,
   editAddress,
+  updateProfile,
 } = require("../controller/userController");
 
 router.get("/userProfile", userProfile);
@@ -17,5 +18,7 @@ router.post("/addAddress", addAddress);
 router.post("/deleteAddress", deleteAddress);
 
 router.put("/editAddress", editAddress);
+
+router.post("/updateProfile", updateProfile);
 
 module.exports = router;

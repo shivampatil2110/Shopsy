@@ -12,8 +12,6 @@ function createInvoice(invoice, path, res) {
   generateHeader(doc);
   generateCustomerInformation(doc, invoice);
   generateInvoiceTable(doc, invoice);
-  generateFooter(doc);
-
   doc.end();
 }
 
@@ -23,9 +21,8 @@ function generateHeader(doc) {
     .image(logoPath, 50, 45, { width: 50 })
     .fillColor("#444444")
     .fontSize(20)
-    .text("Company Name", 110, 57)
     .fontSize(10)
-    .text("Company Name", 200, 50, { align: "right" })
+    .text("Amazon", 200, 50, { align: "right" })
     .text("123 Main Street", 200, 65, { align: "right" })
     .text("New York, NY, 10025", 200, 80, { align: "right" })
     .moveDown();
@@ -139,17 +136,6 @@ function generateInvoiceTable(doc, invoice) {
   doc.font("Helvetica");
 }
 
-function generateFooter(doc) {
-  doc
-    .fontSize(10)
-    .text(
-      "Payment is due within 15 days. Thank you for your business.",
-      50,
-      780,
-      { align: "center", width: 500 }
-    );
-}
-
 function generateTableRow(
   doc,
   y,
@@ -173,7 +159,7 @@ function generateHr(doc, y) {
 }
 
 function formatCurrency(cents) {
-  return "$" + (cents / 100).toFixed(2);
+  return "Rs " + cents.toFixed(2);
 }
 
 function formatDate(date) {

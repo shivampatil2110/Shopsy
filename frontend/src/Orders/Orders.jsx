@@ -6,6 +6,7 @@ import { GlobalContext } from "../util/GlobalState";
 import Spinner from "../util/Spinner";
 import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
+import Cookie from "js-cookie";
 
 const Orders = () => {
   const [orders, setOrders] = useState();
@@ -19,6 +20,9 @@ const Orders = () => {
         let response = await axios.get(
           `${process.env.REACT_APP_SERVER_ADDRESS}/orders/getAllOrders`,
           { withCredentials: true }
+        );
+        response.data.sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
         );
         setOrders(response.data);
         setLoading(false);
@@ -39,9 +43,10 @@ const Orders = () => {
   async function generateInvoice(order) {
     try {
       console.log(order);
+      let userId = Cookie.get("userId");
       let response = await axios.post(
         `${process.env.REACT_APP_SERVER_ADDRESS}/orders/generateInvoice`,
-        order,
+        { order, userId },
         {
           withCredentials: true,
         }

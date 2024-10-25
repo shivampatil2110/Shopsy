@@ -63,10 +63,22 @@ const editAddress = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+  try {
+    let { image, userId } = req.body;
+    await User.findByIdAndUpdate(userId, { userImage: image });
+    res.status(200).send({ msg: "Updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ msg: "Error updating profile" });
+  }
+};
+
 module.exports = {
   userProfile,
   addAddress,
   getAddress,
   deleteAddress,
   editAddress,
+  updateProfile,
 };

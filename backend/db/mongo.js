@@ -10,7 +10,7 @@ const connectDB = async () => {
   } catch (e) {
     if (retry_count < 3) {
       console.log(
-        "Error connecting to Mongo retrying for " + retry_count + 1 + " time"
+        "Error connecting to Mongo retrying for " + retry_count + " time"
       );
       retry_count++;
       connectDB();

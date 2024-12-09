@@ -13,17 +13,32 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
+                script {
+                    echo 'Checking out the source code...'
+                }
                 git 'https://github.com/shivampatil2110/Shopsy.git'
+                script {
+                    echo 'Pulled source code successfully...'
+                }
             }
         }
 
         stage('Build and Tag Docker Images') {
             steps {
                 script {
+                    echo 'Starting the build process...'
                     sh 'docker-compose build'
+                    echo 'docker-compose build completed'
+                    echo "Tagging the frontend image"
                     sh """
-                    docker tag E-Commerce:latest $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+                    docker tag frontend:latest $ECR_REGISTRY/$ECR_REPO-frontend:$IMAGE_TAG
                     """
+                    echo 'Tagging the backend image'
+                    sh """
+                    docker tag backend:latest $ECR_REGISTRY/$ECR_REPO-backend:$IMAGE_TAG
+                    """
+                    echo 'docker tag completed'
+                    echo 'Completed the build process...'
                 }
             }
         }
@@ -32,11 +47,13 @@ pipeline {
             steps {
                 script {
                     // Authenticate to AWS ECR
+                    echo 'Starting the ECR push process...'
                     sh """
                     aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
                     """
                     // Push the Docker image
                     sh """docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG"""
+                    echo 'Completed the push process...'
                 }
             }
         }
@@ -58,8 +75,15 @@ pipeline {
     }
 
     post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs above for more details.'
+        }
         always {
             cleanWs() // Clean up workspace after build
         }
     }
+
 }

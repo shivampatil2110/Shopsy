@@ -54,8 +54,8 @@ pipeline {
             steps {
                 echo 'Logging in to AWS ECR...'
                 sh """
-                aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
-                aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
+                aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
+                aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
                 """
             }
         }

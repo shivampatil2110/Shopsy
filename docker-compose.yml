@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_SERVER_ADDRESS: http://localhost:35000
+    ports:
+      - "3000:80"
+    networks:
+      - fullstack-network
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "35000:35000"
+    networks:
+      - fullstack-network
+
+networks:
+  fullstack-network:
+    driver: bridge

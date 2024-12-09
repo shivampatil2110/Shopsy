@@ -23,40 +23,85 @@ pipeline {
             }
         }
 
-        stage('Build and Tag Docker Images') {
-            steps {
-                script {
-                    echo 'Starting the build process...'
-                    sh 'docker-compose build'
-                    echo 'docker-compose build completed'
-                    echo "Tagging the frontend image"
-                    sh """
-                    docker tag frontend:latest $ECR_REGISTRY/$ECR_REPO-frontend:$IMAGE_TAG
-                    """
-                    echo 'Tagging the backend image'
-                    sh """
-                    docker tag backend:latest $ECR_REGISTRY/$ECR_REPO-backend:$IMAGE_TAG
-                    """
-                    echo 'docker tag completed'
-                    echo 'Completed the build process...'
+        stage('Build Docker Images') {
+            parallel {
+                stage('Build Frontend Image') {
+                    steps {
+                        script {
+                            echo 'Building Frontend Docker Image...'
+                            sh '''
+                            cd frontend
+                            docker build -t frontend:latest .
+                            '''
+                        }
+                    }
+                }
+                stage('Build Backend Image') {
+                    steps {
+                        script {
+                            echo 'Building Backend Docker Image...'
+                            sh '''
+                            cd backend
+                            docker build -t backend:latest .
+                            '''
+                        }
+                    }
                 }
             }
         }
 
-        stage('Push to AWS ECR') {
+        stage('Login to AWS ECR') {
             steps {
-                script {
-                    // Authenticate to AWS ECR
-                    echo 'Starting the ECR push process...'
-                    sh """
-                    aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
-                    """
-                    // Push the Docker image
-                    sh """docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG"""
-                    echo 'Completed the push process...'
+                echo 'Logging in to AWS ECR...'
+                sh """
+                aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
+                aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
+                """
+            }
+        }
+
+        stage('Push Docker Images to ECR') {
+            parallel {
+                stage('Push Frontend Image') {
+                    steps {
+                        script {
+                            echo 'Tagging and Pushing Frontend Docker Image...'
+                            sh """
+                            docker tag frontend:latest public.ecr.aws/v2w9p4l2/frontend:latest
+                            docker push public.ecr.aws/v2w9p4l2/frontend:latest
+                            """
+                        }
+                    }
+                }
+                stage('Push Backend Image') {
+                    steps {
+                        script {
+                            echo 'Tagging and Pushing Backend Docker Image...'
+                            sh """
+                            docker tag backend:latest public.ecr.aws/v2w9p4l2/backend:latest
+                            docker tag backend:latest public.ecr.aws/v2w9p4l2/backend:latest
+                            """
+                        }
+                    }
                 }
             }
         }
+
+
+        // stage('Push to AWS ECR') {
+        //     steps {
+        //         script {
+        //             // Authenticate to AWS ECR
+        //             echo 'Starting the ECR push process...'
+        //             sh """
+        //             aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
+        //             """
+        //             // Push the Docker image
+        //             sh """docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG"""
+        //             echo 'Completed the push process...'
+        //         }
+        //     }
+        // }
 
         // stage('Deploy on EC2') {
         //     steps {

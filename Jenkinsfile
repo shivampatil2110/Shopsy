@@ -11,73 +11,72 @@ pipeline {
     }
 
     stages {
-        // stage('Build Docker Images') {
-        //     parallel {
-        //         stage('Build Frontend Image') {
-        //             steps {
-        //                 script {
-        //                     echo 'Building Frontend Docker Image...'
-        //                     sh '''
-        //                     cd frontend
-        //                     docker build -t frontend .
-        //                     '''
-        //                 }
-        //             }
-        //         }
-        //         stage('Build Backend Image') {
-        //             steps {
-        //                 script {
-        //                     echo 'Building Backend Docker Image...'
-        //                     sh '''
-        //                     cd backend
-        //                     docker build -t backend .
-        //                     '''
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build Docker Images') {
+            parallel {
+                stage('Build Frontend Image') {
+                    steps {
+                        script {
+                            echo 'Building Frontend Docker Image...'
+                            sh '''
+                            cd frontend
+                            docker build -t frontend .
+                            '''
+                        }
+                    }
+                }
+                stage('Build Backend Image') {
+                    steps {
+                        script {
+                            echo 'Building Backend Docker Image...'
+                            sh '''
+                            cd backend
+                            docker build -t backend .
+                            '''
+                        }
+                    }
+                }
+            }
+        }
 
-        // stage('Login to AWS ECR') {
-        //     steps {
-        //         echo 'Logging in to AWS ECR...'
-        //         sh """
-        //         aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
-        //         """
-        //     }
-        // }
+        stage('Login to AWS ECR') {
+            steps {
+                echo 'Logging in to AWS ECR...'
+                sh """
+                aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
+                """
+            }
+        }
 
-        // stage('Push Docker Images to ECR') {
-        //     parallel {
-        //         stage('Push Frontend Image') {
-        //             steps {
-        //                 script {
-        //                     echo 'Tagging and Pushing Frontend Docker Image...'
-        //                     sh """
-        //                     docker tag frontend:latest public.ecr.aws/v2w9p4l2/frontend:latest
-        //                     docker push public.ecr.aws/v2w9p4l2/frontend:latest
-        //                     """
-        //                 }
-        //             }
-        //         }
-        //         stage('Push Backend Image') {
-        //             steps {
-        //                 script {
-        //                     echo 'Tagging and Pushing Backend Docker Image...'
-        //                     sh """
-        //                     docker tag backend:latest public.ecr.aws/v2w9p4l2/backend:latest
-        //                     docker push public.ecr.aws/v2w9p4l2/backend:latest
-        //                     """
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Push Docker Images to ECR') {
+            parallel {
+                stage('Push Frontend Image') {
+                    steps {
+                        script {
+                            echo 'Tagging and Pushing Frontend Docker Image...'
+                            sh """
+                            docker tag frontend:latest public.ecr.aws/v2w9p4l2/frontend:latest
+                            docker push public.ecr.aws/v2w9p4l2/frontend:latest
+                            """
+                        }
+                    }
+                }
+                stage('Push Backend Image') {
+                    steps {
+                        script {
+                            echo 'Tagging and Pushing Backend Docker Image...'
+                            sh """
+                            docker tag backend:latest public.ecr.aws/v2w9p4l2/backend:latest
+                            docker push public.ecr.aws/v2w9p4l2/backend:latest
+                            """
+                        }
+                    }
+                }
+            }
+        }
 
         stage('Deploy to EC2') {
             steps {
                 script {
-                    echo "Path is"
                     sh """
                     # SSH into the EC2 instance and pull images
                     realpath --relative-to = /

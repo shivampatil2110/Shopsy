@@ -19,7 +19,7 @@ pipeline {
                             echo 'Building Frontend Docker Image...'
                             sh '''
                             cd frontend
-                            docker build -t frontend .
+                            docker build -t frontend . --build-arg REACT_APP_SERVER_ADDRESS=http://localhost:35000
                             '''
                         }
                     }

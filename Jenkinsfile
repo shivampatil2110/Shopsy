@@ -78,10 +78,32 @@ pipeline {
                             echo 'Tagging and Pushing Backend Docker Image...'
                             sh """
                             docker tag backend:latest public.ecr.aws/v2w9p4l2/backend:latest
-                            docker tag backend:latest public.ecr.aws/v2w9p4l2/backend:latest
+                            docker push public.ecr.aws/v2w9p4l2/backend:latest
                             """
                         }
                     }
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                script {
+                    sh """
+                    # SSH into the EC2 instance and pull images
+                    ssh -i "key-pair.pem" ubuntu@ec2-13-126-229-212.ap-south-1.compute.amazonaws.com << EOF
+                        docker pull public.ecr.aws/v2w9p4l2/frontend:latest
+                        docker pull public.ecr.aws/v2w9p4l2/backend:latest
+
+                        # Stop existing containers (if any)
+                        docker stop frontend backend || true
+                        docker rm frontend backend || true
+
+                        # Run new containers
+                        docker run -d -p 80:80 --name frontend public.ecr.aws/v2w9p4l2/frontend:latest
+                        docker run -d -p 35000:35000 --name backend public.ecr.aws/v2w9p4l2/backend:latest
+                    EOF
+                    """
                 }
             }
         }

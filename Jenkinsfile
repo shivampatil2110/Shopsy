@@ -11,17 +11,17 @@ pipeline {
     }
 
     stages {
-        stage('Clone Repository') {
-            steps {
-                script {
-                    echo 'Checking out the source code...'
-                }
-                git 'https://github.com/shivampatil2110/Shopsy.git'
-                script {
-                    echo 'Pulled source code successfully...'
-                }
-            }
-        }
+        // stage('Clone Repository') {
+        //     steps {
+        //         script {
+        //             echo 'Checking out the source code...'
+        //         }
+        //         git 'https://github.com/shivampatil2110/Shopsy.git'
+        //         script {
+        //             echo 'Pulled source code successfully...'
+        //         }
+        //     }
+        // }
 
         stage('Build Docker Images') {
             parallel {
@@ -31,7 +31,7 @@ pipeline {
                             echo 'Building Frontend Docker Image...'
                             sh '''
                             cd frontend
-                            docker build -t frontend:latest .
+                            docker build -t frontend .
                             '''
                         }
                     }
@@ -42,7 +42,7 @@ pipeline {
                             echo 'Building Backend Docker Image...'
                             sh '''
                             cd backend
-                            docker build -t backend:latest .
+                            docker build -t backend .
                             '''
                         }
                     }
@@ -54,8 +54,7 @@ pipeline {
             steps {
                 echo 'Logging in to AWS ECR...'
                 sh """
-                aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
-                aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
+                aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
                 """
             }
         }

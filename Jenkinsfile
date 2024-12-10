@@ -91,6 +91,7 @@ pipeline {
                 script {
                     sh """
                     # SSH into the EC2 instance and pull images
+                    chmod 400 "key-pair.pem"
                     ssh -i "key-pair.pem" ubuntu@ec2-13-126-229-212.ap-south-1.compute.amazonaws.com << EOF
                         docker pull public.ecr.aws/v2w9p4l2/frontend:latest
                         docker pull public.ecr.aws/v2w9p4l2/backend:latest

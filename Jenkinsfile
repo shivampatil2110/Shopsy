@@ -82,6 +82,7 @@ pipeline {
                     realpath --relative-to = /
                     chmod 400 "/key-pair.pem"
                     ssh -i "/key-pair.pem" ubuntu@ec2-13-126-229-212.ap-south-1.compute.amazonaws.com << EOF
+                        aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
                         docker pull public.ecr.aws/v2w9p4l2/frontend:latest
                         docker pull public.ecr.aws/v2w9p4l2/backend:latest
 

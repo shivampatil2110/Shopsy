@@ -15,7 +15,10 @@ ENV REACT_APP_SERVER_ADDRESS=${REACT_APP_SERVER_ADDRESS}
 RUN npm run build
 
 # Use Nginx for serving static files
-FROM nginx:stable-alpine
+FROM nginx:stable
+RUN apt update && \
+    apt install -y vim systemctl && \
+    apt clean && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /app/build /usr/share/nginx/html
 
 # Expose the Nginx port

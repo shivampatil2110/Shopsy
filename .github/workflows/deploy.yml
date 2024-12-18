@@ -21,7 +21,7 @@ jobs:
           # Connect to the EC2 instance and deploy
           cd /
           sudo touch server-login.pem
-          sudo echo "$SSH_PRIVATE_KEY" > /server-login.pem
+          sudo sh -c 'echo '$SSH_PRIVATE_KEY' > /server-login.pem'
           ssh -i "server-login.pem" ubuntu@ec2-13-203-77-47.ap-south-1.compute.amazonaws.com << 'EOF'
           echo "Starting deployment..."
 

@@ -46,6 +46,7 @@ kR4AT2P3OWsnE/pKaHY+ZBEp5uzlwFV5XUd1hZ1WmGYZ4XaHTp8a1pHsbgP/EFUD
 
           # Connect to the EC2 instance and deploy
           echo "$SSH_PRIVATE_KEY"
+          echo "$SSH_PRIVATE_KEY"
           cd /
           sudo touch server-login.pem
           sudo chmod 600 /server-login.pem

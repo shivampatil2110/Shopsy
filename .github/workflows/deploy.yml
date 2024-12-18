@@ -19,6 +19,7 @@ jobs:
         run: |
 
           # Connect to the EC2 instance and deploy
+          echo "$SSH_PRIVATE_KEY"
           cd /
           sudo touch server-login.pem
           sudo chmod 600 /server-login.pem

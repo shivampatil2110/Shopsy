@@ -78,7 +78,7 @@ pipeline {
                             echo 'Tagging and Pushing Backend Docker Image...'
                             sh """
                             docker tag backend:latest public.ecr.aws/v2w9p4l2/backend:latest
-                            docker tag backend:latest public.ecr.aws/v2w9p4l2/backend:latest
+                            docker push public.ecr.aws/v2w9p4l2/backend:latest
                             """
                         }
                     }
@@ -86,36 +86,31 @@ pipeline {
             }
         }
 
+        stage('Deploy to EC2') {
+            steps {
+                script {
+                    sh """
+                    # SSH into the EC2 instance and pull images
+                    realpath --relative-to = /
+                    chmod 400 "/key-pair.pem"
+                    ssh -i "/key-pair.pem" ubuntu@ec2-13-126-229-212.ap-south-1.compute.amazonaws.com << EOF
+                        aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v2w9p4l2
+                        docker pull public.ecr.aws/v2w9p4l2/frontend:latest
+                        docker pull public.ecr.aws/v2w9p4l2/backend:latest
 
-        // stage('Push to AWS ECR') {
-        //     steps {
-        //         script {
-        //             // Authenticate to AWS ECR
-        //             echo 'Starting the ECR push process...'
-        //             sh """
-        //             aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
-        //             """
-        //             // Push the Docker image
-        //             sh """docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG"""
-        //             echo 'Completed the push process...'
-        //         }
-        //     }
-        // }
+                        # Stop existing containers (if any)
+                        docker stop frontend backend || true
+                        docker rm frontend backend || true
 
-        // stage('Deploy on EC2') {
-        //     steps {
-        //         script {
-        //             // SSH into EC2 instance and deploy the Docker image
-        //             sh """
-        //             ssh -i $SSH_KEY $EC2_USER@$EC2_HOST <<EOF
-        //             docker login --username AWS --password-stdin $ECR_REGISTRY
-        //             docker pull $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
-        //             docker-compose up -d
-        //             EOF
-        //             """
-        //         }
-        //     }
-        // }
+                        # Run new containers
+                        docker run -d -p 80:80 --name frontend public.ecr.aws/v2w9p4l2/frontend:latest
+                        docker run -d -p 35000:35000 --name backend public.ecr.aws/v2w9p4l2/backend:latest
+                    EOF
+                    """
+                }
+            }
+        }
+
     }
 
     post {
@@ -129,5 +124,4 @@ pipeline {
             cleanWs() // Clean up workspace after build
         }
     }
-
 }

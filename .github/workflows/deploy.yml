@@ -23,6 +23,9 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > /tmp/server-login.pem
           chmod 600 /tmp/server-login.pem
 
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
           # Disable host key verification
           echo "Host ec2-13-203-77-47.ap-south-1.compute.amazonaws.com
                 StrictHostKeyChecking no" > ~/.ssh/config

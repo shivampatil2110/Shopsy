@@ -15,33 +15,7 @@ jobs:
 
       - name: Deploy Frontend and Backend to AWS EC2
         env:
-          SSH_PRIVATE_KEY: -----BEGIN RSA PRIVATE KEY-----
-            MIIEogIBAAKCAQEAnDud3W7E58/WbzwhKwlfLoWIyMuxFsKZV2XLR5z9bgRL1XWd
-            PFJJrB/u0CqCwlROIAg5BqqJmm31RaLrmTloPs2UBtfBfDrAuR0p3Mn2JDQ6ndza
-            Ofi9XY6UuQTTyXUaiuyioDWZxYiTuI1faSoEnrvIFGq4d6xfeQNLUqebr0+O/qXZ
-            5BJdB9usvp0QhTRCgQ7mkJpqdMPhvg+GdaVyGEAwKHo1tPJJGpTFRxMkn8fSV+ZI
-            az65tBYyiCXgSCVuOD5bnT0EThloUUCtWzXMKRbpyaQP+YL8VAR37/dpq8BXV/9T
-            aPQoL1QEEFLPObaIxVKMvTkQ3+XaohgHZiF3PwIDAQABAoIBADNjGIWgzXtBzVJB
-            ANfa+Uef/GGvPcwyraUlgjtH08O//gFz8gfJORo4VqB5mxC4EgpPKhKbPS9iQ25o
-            K/319+fQToQBq05lNMauZPqOIzu9QhpybgTrX73KC/jfMZntvpE7TDJN7wod5hip
-            x1wbyfE76o9smsgiFjUDdF73aim7CcXJhPeFgENXc6ZVyRgE2MxgHaBwjaUNEqJA
-            7V/zRt6I+77/MeVbnOYLU6X++hpAna5Jq1k3kHJQ/05sfkn1idxDgPA3hmx2MMeg
-            DnM3mlLQZyy7+8u/yOn67afqCJXGEGU9lxFC9USPYk+FTTjTomkTLfx73jgPqcB+
-            FD/couECgYEAyzzT1mAo+dFoAs12PPlCXnHE7NPFoOUzR5fyk1/Pqf50+FOHFgft
-            eVMcNzzMEnst1GbwHuAkvymTntoE0HoVds9IqooyF4l83kXsLv/uFC0lR6PLTkMp
-            jyVlr9KDqgZCWFNwq3C/GF6uhQ2ZkuxGw/gKbEG5OMaE85KO/SU9YN0CgYEAxMra
-            xPCeki8v4ynOni2UG6AF+Sk1t/cXeGGkGnSxdHjNzcFX0m1wtt4IYJxGNvGxOOgu
-            Vxzzw/viqJbCbMn6o6OEJHcg41CZV3pusPUG23DqDn3JdDx1ZgkYBETiYUII0zoq
-            d1bDl34fvN/D3h+6N4QbPyBpcASxHZf4JLzdyMsCgYBdhsV5ftD8fbheqcyCrLY1
-            HifgUGg+7ZrWlH8mAM5gzV9os4+TvNw0m+F9LfY/fv4NI73Wh5GBgxGS5YOXqMbd
-            4O/wwx3gJP4Yj5br3gzirg/c0uyJPHEQlcYgzkCW6sB3QxazXnQiM9geFK8apK7A
-            GhI51Vj2XqzqJgS1TADd5QKBgEh1tPXc71Y+P7CyHR0LBUTiuDBVJy10stSlhyoi
-            m5CaRpUjQrX9jAoZWRZRlFz4w1uDykRTKcKZBY0z7aTm/f2w4KAYqShp7fxS3V0U
-            65BzVAs/76R3+nY2lPxFbOGI0f0MpsRIUz59tyvxbIpmPkfgwbONuKUBZUHTShAk
-            5rjfAoGAVMsp1ia3rroOVz2cQMnYIqWH25LBBShdWm8q/nmbBNYU1IqOn1P3U2+m
-            kR4AT2P3OWsnE/pKaHY+ZBEp5uzlwFV5XUd1hZ1WmGYZ4XaHTp8a1pHsbgP/EFUD
-            232BF9k5wIaV06rfxAJqaya+uiepYlEpC7ztty4JQRyXYFLMCdc=
-            -----END RSA PRIVATE KEY-----
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
 
           # Connect to the EC2 instance and deploy

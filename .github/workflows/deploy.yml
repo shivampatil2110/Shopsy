@@ -21,7 +21,7 @@ jobs:
           # Connect to the EC2 instance and deploy
           sudo touch ~/server-login.pem
           echo "$SSH_PRIVATE_KEY" > /tmp/server-login.pem
-          chmod 600 /tmp/server-login.pem
+          chmod 600 /tmp/server-login.pem 
 
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh

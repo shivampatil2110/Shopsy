@@ -38,19 +38,30 @@ jobs:
 
           # Deploy backend
           echo "Deploying backend..."
+          echo "Changed Directory..."
           cd /home/ubuntu/test/Shopsy/backend/
+          echo "Fetching master..."
           git fetch origin master
+          echo "Resetting branch..."
           git reset --hard origin/master
+          echo "Installing Packages"
           npm install
+          echo "Restarting BE"
           pm2 restart /home/ubuntu/test/Shopsy/backend/index.js
 
           # Deploy frontend
           echo "Deploying frontend..."
+          echo "Changed Directory..."
           cd /home/ubuntu/test/Shopsy/frontend/
+          echo "Fetching master..."
           git fetch origin master
+          echo "REsetting branch..."
           git reset --hard origin/master
+          echo "Installing Packages"
           npm install
+          echo "Building FE"
           npm run build
+          echo "Serving FE"
           serve -s /home/ubuntu/test/Shopsy/frontend/build/  # Replace with your frontend deployment directory
 
           echo "Deployment complete."

@@ -19,12 +19,10 @@ jobs:
         run: |
 
           # Connect to the EC2 instance and deploy
-          echo "$SSH_PRIVATE_KEY"
-          cd /
-          sudo touch server-login.pem
-          sudo chmod 600 /server-login.pem
-          sh -c "echo '$SSH_PRIVATE_KEY' > /server-login.pem"
-          ssh -t -i "server-login.pem" ubuntu@ec2-13-203-77-47.ap-south-1.compute.amazonaws.com << 'EOF'
+          sudo touch ~/server-login.pem
+          sudo chmod 600 ~/server-login.pem
+          echo "$SSH_PRIVATE_KEY" > ~/server-login.pem
+          ssh -t -i "~/server-login.pem" ubuntu@ec2-13-203-77-47.ap-south-1.compute.amazonaws.com << 'EOF'
           echo "Starting deployment..."
 
           # Deploy backend

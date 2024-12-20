@@ -6,63 +6,60 @@ on:
       - master
 
 jobs:
-  deploy:
+  setup-ssh:
     runs-on: ubuntu-latest
+    outputs:
+      ssh_key_path: ${{ steps.setup.outputs.ssh_key_path }}
+    steps:
+      - name: Setup SSH Key and Config
+        id: setup
+        run: |
+          echo "Setting up SSH configuration..."
+          sudo touch ~/server-login.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/server-login.pem
+          chmod 600 /tmp/server-login.pem
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "Host ec2-15-206-189-217.ap-south-1.compute.amazonaws.com
+                StrictHostKeyChecking no" > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+          echo "/tmp/server-login.pem" # Output the path for reuse
 
+  deploy-backend:
+    if: ${{ contains(github.event.commits.*.modified, 'backend/**') }}
+    needs: setup-ssh
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy Frontend and Backend to AWS EC2
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Deploy Backend
         run: |
-
-          # Connect to the EC2 instance and deploy
-          sudo touch ~/server-login.pem
-          echo "$SSH_PRIVATE_KEY" > /tmp/server-login.pem
-          chmod 600 /tmp/server-login.pem 
-
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          # Disable host key verification
-          echo "Host ec2-13-201-73-187.ap-south-1.compute.amazonaws.com
-                StrictHostKeyChecking no" > ~/.ssh/config
-          chmod 600 ~/.ssh/config
-
-          # Connect to the EC2 instance and deploy
-          ssh -tt -i "/tmp/server-login.pem" ubuntu@ec2-13-201-73-187.ap-south-1.compute.amazonaws.com << 'EOF'
-          set -e  # Stop execution on remote script errors
-
-          # Deploy backend
-          echo "Deploying backend..."
-          echo "Changed Directory..."
+          ssh -tt -i "/tmp/server-login.pem" ubuntu@ec2-15-206-189-217.ap-south-1.compute.amazonaws.com << 'EOF'
           cd /home/ubuntu/test/Shopsy/backend/
-          echo "Fetching master..."
           git fetch origin master
-          echo "Resetting branch..."
           git reset --hard origin/master
-          echo "Installing Packages"
           npm install
-          echo "Restarting BE"
           pm2 restart /home/ubuntu/test/Shopsy/backend/index.js
+          exit
+          EOF
 
-          # Deploy frontend
-          echo "Deploying frontend..."
-          echo "Changed Directory..."
+  deploy-frontend:
+    if: ${{ contains(github.event.commits.*.modified, 'frontend/**') }}
+    needs: setup-ssh
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy Frontend
+        run: |
+          ssh -tt -i "/tmp/server-login.pem" ubuntu@ec2-15-206-189-217.ap-south-1.compute.amazonaws.com << 'EOF'
           cd /home/ubuntu/test/Shopsy/frontend/
-          echo "Fetching master..."
           git fetch origin master
-          echo "REsetting branch..."
           git reset --hard origin/master
-          rm -rf node_modules package-lock.json
-          npm cache clean --force
-          npm install --force
-          echo "Building FE"
+          npm install --legacy-peer-deps
           npm run build
-          echo "Serving FE"
-          serve -s /home/ubuntu/test/Shopsy/frontend/build/  # Replace with your frontend deployment directory
-
-          echo "Deployment complete."
+          serve -s build
+          exit
           EOF

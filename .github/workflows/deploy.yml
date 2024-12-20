@@ -27,12 +27,12 @@ jobs:
           chmod 700 ~/.ssh
 
           # Disable host key verification
-          echo "Host ec2-13-201-223-119.ap-south-1.compute.amazonaws.com
+          echo "Host ec2-65-0-181-126.ap-south-1.compute.amazonaws.com
                 StrictHostKeyChecking no" > ~/.ssh/config
           chmod 600 ~/.ssh/config
 
           # Connect to the EC2 instance and deploy
-          ssh -tt -i "/tmp/server-login.pem" ubuntu@ec2-13-201-223-119.ap-south-1.compute.amazonaws.com << 'EOF'
+          ssh -tt -i "/tmp/server-login.pem" ubuntu@ec2-65-0-181-126.ap-south-1.compute.amazonaws.com << 'EOF'
           set -e  # Stop execution on remote script errors
 
           # Deploy backend
@@ -56,8 +56,6 @@ jobs:
           git fetch origin master
           echo "REsetting branch..."
           git reset --hard origin/master
-          echo "Installing Packages"
-          npm install
           echo "Building FE"
           npm run build
           echo "Serving FE"

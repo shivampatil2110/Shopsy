@@ -1,109 +1,104 @@
+---
 name: Deploy to AWS EC2
-
 on:
   push:
     branches:
       - master
-
 jobs:
-  detect-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      backend-changed: ${{ steps.check-backend.outputs.changed }}
-      frontend-changed: ${{ steps.check-frontend.outputs.changed }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Check Backend Changes
-        id: check-backend
-        run: |
-          if git diff --name-only HEAD~1 HEAD | grep '^backend/'; then
-            echo "changed=true" >> $GITHUB_ENV
-          else
-            echo "changed=false" >> $GITHUB_ENV
-          fi
-        outputs:
-          changed: ${{ env.changed }}
-
-      - name: Check Frontend Changes
-        id: check-frontend
-        run: |
-          if git diff --name-only HEAD~1 HEAD | grep '^frontend/'; then
-            echo "changed=true" >> $GITHUB_ENV
-          else
-            echo "changed=false" >> $GITHUB_ENV
-          fi
-        outputs:
-          changed: ${{ env.changed }}
-
-  deploy-backend:
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.backend-changed == 'true' }}
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
+      - name: Deploy Frontend and Backend to AWS EC2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: >
+          
+          # Connect to the EC2 instance and deploy
 
-      - name: Setup SSH Connection
-        run: |
           sudo touch ~/server-login.pem
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/server-login.pem
-          chmod 600 /tmp/server-login.pem
-          
+
+          echo "$SSH_PRIVATE_KEY" > /tmp/server-login.pem
+
+          chmod 600 /tmp/server-login.pem 
+
+
           mkdir -p ~/.ssh
+
           chmod 700 ~/.ssh
-          
+
+
+          # Disable host key verification
+
           echo "Host ec2-15-206-189-217.ap-south-1.compute.amazonaws.com
                 StrictHostKeyChecking no" > ~/.ssh/config
           chmod 600 ~/.ssh/config
 
-      - name: Deploy Backend
-        run: |
+
+          # Connect to the EC2 instance and deploy
+
           ssh -tt -i "/tmp/server-login.pem" ubuntu@ec2-15-206-189-217.ap-south-1.compute.amazonaws.com << 'EOF'
-          cd /home/ubuntu/backend
+
+          set -e  # Stop execution on remote script errors
+
+
+          # Deploy backend
+
+          echo "Deploying backend..."
+
+          echo "Changed Directory..."
+
+          cd /home/ubuntu/test/Shopsy/backend/
+
+          echo "Fetching master..."
+
+          git fetch origin master
+
+          echo "Resetting branch..."
+
           git reset --hard origin/master
+
+          echo "Installing Packages"
+
           npm install
-          pm2 restart backend-service
-          EOF
 
-  deploy-frontend:
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.frontend-changed == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+          echo "Restarting BE"
 
-      - name: Setup SSH Connection
-        run: |
-          sudo touch ~/server-login.pem
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/server-login.pem
-          chmod 600 /tmp/server-login.pem
-          
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          
-          echo "Host ec2-15-206-189-217.ap-south-1.compute.amazonaws.com
-                StrictHostKeyChecking no" > ~/.ssh/config
-          chmod 600 ~/.ssh/config
+          pm2 restart /home/ubuntu/test/Shopsy/backend/index.js
 
-      - name: Deploy Frontend
-        run: |
-          ssh -tt -i "/tmp/server-login.pem" ubuntu@ec2-15-206-189-217.ap-south-1.compute.amazonaws.com << 'EOF'
-          cd /home/ubuntu/frontend
+
+          # Deploy frontend
+
+          echo "Deploying frontend..."
+
+          echo "Changed Directory..."
+
+          cd /home/ubuntu/test/Shopsy/frontend/
+
+          echo "Fetching master..."
+
+          git fetch origin master
+
+          echo "REsetting branch..."
+
           git reset --hard origin/master
-          npm install
+
+          rm -rf node_modules package-lock.json
+
+          npm cache clean --force
+
+          npm install --legacy-peer-deps
+
+          echo "Building FE"
+
           npm run build
-          serve -s build
-          EOF
 
-  disconnect-ec2:
-    needs: [deploy-backend, deploy-frontend]
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Disconnect from EC2 Instance
-        run: |
-          echo "Disconnecting from EC2 instance..."
-          ssh -O exit -i "/tmp/server-login.pem" ubuntu@ec2-15-206-189-217.ap-south-1.compute.amazonaws.com
+          echo "Serving FE"
+
+          serve -s /home/ubuntu/test/Shopsy/frontend/build/  # Replace with your frontend deployment directory
+
+
+          echo "Deployment complete."
+
+          EOF

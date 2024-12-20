@@ -58,7 +58,7 @@ jobs:
           git reset --hard origin/master
           rm -rf node_modules package-lock.json
           npm cache clean --force
-          npm install
+          npm install --force
           echo "Building FE"
           npm run build
           echo "Serving FE"
